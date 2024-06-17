@@ -1,4 +1,4 @@
-import API, {OrdersResponse} from "../api/interface";
+import API, {MakeApiFromLocalStorage, OrdersResponse} from "../api/interface";
 import {useLoaderData, useNavigate} from "react-router-dom";
 import {borderStyle} from "../components/border";
 import Heading from "../components/heading";
@@ -7,9 +7,10 @@ import {Td, Th, Tr} from "../components/table";
 import Gold from "../components/gold";
 import useMobile from "../hooks/isMobile";
 import Button from "../components/button";
+import useApi from "../api/interface";
 
 export async function OrdersLoader(): Promise<OrdersResponse> {
-    return await API.Orders()
+    return await MakeApiFromLocalStorage().Orders()
 }
 
 export default function Orders() {

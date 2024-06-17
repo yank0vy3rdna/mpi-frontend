@@ -11,13 +11,18 @@ import axios from "axios";
 
 export class Api implements Interface {
     baseApiPath = "/api"
+    token = ""
+
+    constructor(token: string) {
+        this.token = token
+    }
 
     async Login(username: string, password: string): Promise<string> {
         const req: LoginRequest = {
             username: username,
             password: password
         }
-        const response = await axios.post<LoginResponse>(`${this.baseApiPath}/auth`, req, {
+        const response = await axios.post<LoginResponse>(`${this.baseApiPath}/auth/login`, req, {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -41,25 +46,38 @@ export class Api implements Interface {
         })
         const response = await axios.post<MakeAnOrderResponse>(`${this.baseApiPath}/orders/new`, req, {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.token}`
             },
         })
         return response.data
     }
 
     async Orders(): Promise<OrdersResponse> {
-        const resp = await axios.get<OrdersResponse>(`${this.baseApiPath}/orders`)
+        const resp = await axios.get<OrdersResponse>(`${this.baseApiPath}/orders`, {
+            headers: {
+                'Authorization': `Bearer ${this.token}`
+            }
+        })
         return resp.data
     }
 
     async Units(): Promise<UnitsResponse> {
-        const resp = await axios.get<UnitsResponse>(`${this.baseApiPath}/units`)
+        const resp = await axios.get<UnitsResponse>(`${this.baseApiPath}/units`, {
+            headers: {
+                'Authorization': `Bearer ${this.token}`
+            }
+        })
         return resp.data
     }
 
     async UnitById(id: number): Promise<UnitDetails> {
-        const resp = await axios.get<UnitDetails>(`${this.baseApiPath}/units/${id}`)
+        const resp = await axios.get<UnitDetails>(`${this.baseApiPath}/units/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${this.token}`
+            }
+        })
         return resp.data
     }
 }
-export default Api
+

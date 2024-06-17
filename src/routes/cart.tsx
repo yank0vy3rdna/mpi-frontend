@@ -1,4 +1,4 @@
-import API, {Unit} from "../api/interface";
+import API, {MakeApiFromLocalStorage, Unit} from "../api/interface";
 import {useLoaderData, useNavigate} from "react-router-dom";
 import useCartStore from "../store/cartStore";
 import {Box, Center, Flex, FormControl, FormLabel, Input} from "@chakra-ui/react";
@@ -10,13 +10,15 @@ import Button from "../components/button";
 import {useState} from "react";
 import api from "../api/interface";
 import {Td, Th, Tr} from "../components/table";
+import useApi from "../api/interface";
 
 export async function CartLoader() {
-    return await API.Units()
+    return await MakeApiFromLocalStorage().Units()
 }
 
 export default function Cart() {
     const isMobile = useMobile()
+    const api = useApi()
     const navigate = useNavigate()
     const units = useLoaderData() as { units: Unit[] };
     const [longitude, setLongitude] = useState(0)

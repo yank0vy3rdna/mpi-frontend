@@ -7,9 +7,12 @@ import useAuth from "../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
 import useTokenStore from "../store/tokenStore";
 import {useEffect, useState} from "react";
+import useApi from "../api/interface";
 
 export default function Login() {
     const isMobile = useMobile()
+    const api = useApi()
+
     const navigate = useNavigate()
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
@@ -59,7 +62,7 @@ export default function Login() {
 
             <Center mt={"30px"}>
                 <Button text={"Sign in"} onClick={() => {
-                    login(username, password)
+                    login(api, username, password)
                 }}/>
             </Center>
         </Flex>

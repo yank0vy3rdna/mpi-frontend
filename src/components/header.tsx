@@ -39,7 +39,7 @@ export default function Header() {
                                                                         as={TiShoppingCart}/></Center> : <></>
                 }
                 {
-                    isAuthenticated ? <Center color={"white"} pl={5}>{jwtData.name}</Center> : <></>
+                    isAuthenticated ? <Center color={"white"} pl={5}>{jwtData.sub}</Center> : <></>
                 }
                 {
                     isAuthenticated

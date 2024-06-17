@@ -1,5 +1,5 @@
-import {mockApi} from "./mock";
-import Api from "./api";
+import useTokenStore from "../store/tokenStore";
+import {Api} from "./api";
 
 export interface Interface {
     Login(username: string, password: string): Promise<string>
@@ -16,7 +16,7 @@ export interface Interface {
     Orders(): Promise<OrdersResponse>
 }
 
-export interface OrdersResponse{
+export interface OrdersResponse {
     orders: {
         id: number,
         status: string,
@@ -24,6 +24,7 @@ export interface OrdersResponse{
         orderUnits: { unitId: number, count: number }[],
     }[]
 }
+
 export interface MakeAnOrderResponse {
     success: boolean
 }
@@ -66,5 +67,17 @@ export interface LoginResponse {
 
 // export const API: Interface = new mockApi()
 
-export const API: Interface = new Api()
-export default API
+
+export default function useApi(): Interface {
+    const token = useTokenStore(state => state.token)
+    return new Api(token)
+}
+
+export function MakeApiFromLocalStorage(): Interface {
+    let tokenStore = window.localStorage.getItem("tokenStore")
+    if (tokenStore === null) {
+        tokenStore = "{}"
+    }
+    const token = JSON.parse(tokenStore).state.token
+    return new Api(token)
+}

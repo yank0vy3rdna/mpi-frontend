@@ -13,7 +13,7 @@ const parseJwt = (token: string) => {
 
 interface jwtDataI {
     exp: string
-    name: string
+    sub: string
 }
 
 export default function useAuth(): [string, boolean, jwtDataI, () => void] {
@@ -30,10 +30,10 @@ export default function useAuth(): [string, boolean, jwtDataI, () => void] {
     })
     let jwtData: jwtDataI = {
         exp: "",
-        name: "Andrey"
+        sub: "Andrey"
     }
     if (isAuthenticated) {
-        parseJwt(token)
+        jwtData = parseJwt(token)
     }
     return [token, isAuthenticated, jwtData, () => {
         logout()

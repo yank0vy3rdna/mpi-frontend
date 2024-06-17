@@ -1,15 +1,16 @@
 import {borderStyle} from "../components/border";
 import {Box, Center, Flex, Image} from "@chakra-ui/react";
 import useMobile from "../hooks/isMobile";
-import API, {UnitDetails} from "../api/interface";
+import API, {MakeApiFromLocalStorage, UnitDetails} from "../api/interface";
 import {useLoaderData, useNavigate} from "react-router-dom";
 import Heading from "../components/heading";
 import useCartStore from "../store/cartStore";
 import Button from "../components/button";
+import useApi from "../api/interface";
 
 export async function UnitLoader({params}: any) {
     const p = params as { unitId: number }
-    return await API.UnitById(p.unitId)
+    return await MakeApiFromLocalStorage().UnitById(p.unitId)
 }
 
 export default function Unit() {

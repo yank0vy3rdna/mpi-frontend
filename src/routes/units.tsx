@@ -1,10 +1,10 @@
 import {Flex} from "@chakra-ui/react";
 import UnitCard from "../components/UnitCard";
-import API, {Unit, UnitsResponse} from "../api/interface";
+import API, {MakeApiFromLocalStorage, Unit, UnitsResponse} from "../api/interface";
 import {useLoaderData} from "react-router-dom";
 
 export async function UnitsLoader(): Promise<UnitsResponse> {
-    return await API.Units()
+    return await MakeApiFromLocalStorage().Units()
 }
 
 export default function Units() {
