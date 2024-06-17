@@ -1,6 +1,6 @@
 import {create} from "zustand";
 import {devtools, persist} from "zustand/middleware";
-import API from "../api/api";
+import API from "../api/interface";
 
 interface State {
     token: string

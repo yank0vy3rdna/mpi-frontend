@@ -1,9 +1,9 @@
 import {Flex} from "@chakra-ui/react";
 import UnitCard from "../components/UnitCard";
-import API, {Unit} from "../api/api";
+import API, {Unit, UnitsResponse} from "../api/interface";
 import {useLoaderData} from "react-router-dom";
 
-export async function UnitsLoader(): Promise<Unit[]> {
+export async function UnitsLoader(): Promise<UnitsResponse> {
     return await API.Units()
 }
 

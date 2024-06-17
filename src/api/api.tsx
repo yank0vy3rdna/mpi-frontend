@@ -1,68 +1,65 @@
-import {mockApi} from "./mock";
+import {
+    Interface,
+    LoginRequest,
+    LoginResponse, MakeAnOrderRequest,
+    MakeAnOrderResponse,
+    OrdersResponse,
+    UnitDetails,
+    UnitsResponse
+} from "./interface";
+import axios from "axios";
 
-interface API {
-    Login(username: string, password: string): Promise<string>
+export class Api implements Interface {
+    baseApiPath = "/api"
 
-    Units(): Promise<UnitsResponse>
+    async Login(username: string, password: string): Promise<string> {
+        const req: LoginRequest = {
+            username: username,
+            password: password
+        }
+        const response = await axios.post<LoginResponse>(`${this.baseApiPath}/auth`, req, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+        return response.data.token
+    }
 
-    UnitById(id: number): Promise<UnitDetails>
+    async MakeAnOrder(cart: { [id: number]: number },
+                      latitude: number,
+                      longitude: number): Promise<MakeAnOrderResponse> {
+        const req: MakeAnOrderRequest = {
+            orderUnits: [],
+            latitude: latitude,
+            longitude: longitude
+        }
+        req.orderUnits = Object.keys(cart).map((unitId) => {
+            return {
+                unitId: Number(unitId),
+                count: cart[Number(unitId)]
+            }
+        })
+        const response = await axios.post<MakeAnOrderResponse>(`${this.baseApiPath}/orders/new`, req, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+        return response.data
+    }
 
-    MakeAnOrder(cart: { [id: number]: number },
-                latitude: number,
-                longitude: number
-    ): Promise<MakeAnOrderResponse>
+    async Orders(): Promise<OrdersResponse> {
+        const resp = await axios.get<OrdersResponse>(`${this.baseApiPath}/orders`)
+        return resp.data
+    }
 
-    Orders(): Promise<OrdersResponse>
+    async Units(): Promise<UnitsResponse> {
+        const resp = await axios.get<UnitsResponse>(`${this.baseApiPath}/units`)
+        return resp.data
+    }
+
+    async UnitById(id: number): Promise<UnitDetails> {
+        const resp = await axios.get<UnitDetails>(`${this.baseApiPath}/units/${id}`)
+        return resp.data
+    }
 }
-
-export interface OrdersResponse{
-    orders: {
-        id: number,
-        status: string,
-        orderTime: string,
-        orderUnits: { unitId: number, count: number }[],
-    }[]
-}
-export interface MakeAnOrderResponse {
-    success: boolean
-}
-
-export interface MakeAnOrderRequest {
-    orderUnits: { unitId: number, count: number }[],
-    latitude: number,
-    longitude: number
-}
-
-export interface Unit {
-    id: number
-    name: string
-    pictureUrl: string
-    count: number
-    price: number
-}
-
-export interface UnitDetails {
-    id: number
-    name: string
-    pictureUrl: string
-    description: string
-    count: number
-    price: number
-}
-
-export interface UnitsResponse {
-    units: Unit[]
-}
-
-interface LoginRequest {
-    username: string
-    password: string
-}
-
-interface LoginResponse {
-    token: string
-}
-
-
-export const API: API = new mockApi()
-export default API
+export default Api

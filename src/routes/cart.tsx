@@ -1,4 +1,4 @@
-import API, {Unit} from "../api/api";
+import API, {Unit} from "../api/interface";
 import {useLoaderData, useNavigate} from "react-router-dom";
 import useCartStore from "../store/cartStore";
 import {Box, Center, Flex, FormControl, FormLabel, Input} from "@chakra-ui/react";
@@ -8,7 +8,7 @@ import Heading from "../components/heading";
 import Gold from "../components/gold";
 import Button from "../components/button";
 import {useState} from "react";
-import api from "../api/api";
+import api from "../api/interface";
 import {Td, Th, Tr} from "../components/table";
 
 export async function CartLoader() {

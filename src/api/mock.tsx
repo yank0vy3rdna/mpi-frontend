@@ -1,6 +1,6 @@
-import API, {MakeAnOrderRequest, MakeAnOrderResponse, OrdersResponse, UnitDetails, UnitsResponse} from "./api";
+import {Interface, MakeAnOrderResponse, OrdersResponse, UnitDetails, UnitsResponse} from "./interface";
 
-export class mockApi implements API {
+export class mockApi implements Interface {
     async Login(username: string, password: string): Promise<string> {
         return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOiIxMjM0NTY3ODkwMCIsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMn0.yVb5XmnTwe0RQkDZp9ZW0-EgPoxoYb-rPD3wQxIvv_w"
     }

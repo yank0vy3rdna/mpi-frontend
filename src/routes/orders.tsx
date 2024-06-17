@@ -1,4 +1,4 @@
-import API, {OrdersResponse} from "../api/api";
+import API, {OrdersResponse} from "../api/interface";
 import {useLoaderData, useNavigate} from "react-router-dom";
 import {borderStyle} from "../components/border";
 import Heading from "../components/heading";
