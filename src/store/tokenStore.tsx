@@ -1,8 +1,6 @@
 import {create} from "zustand";
 import {devtools, persist} from "zustand/middleware";
-import useApi, {Interface} from "../api/interface";
-
-// import API from "../api/interface";
+import {Interface} from "../api/interface";
 
 interface State {
     token: string
@@ -13,6 +11,8 @@ interface Action {
     logout(): void
 
     login(api: Interface, username: string, password: string): void
+
+    register(api: Interface, email: string, username: string, password: string): void
 }
 
 const initialState: State = {
@@ -29,6 +29,10 @@ export const useTokenStore = create<State & Action>()(
                 },
                 async login(api: Interface, username: string, password: string) {
                     const token = await api.Login(username, password)
+                    set({token: token, isAuthenticated: true})
+                },
+                async register(api: Interface, email: string, username: string, password: string) {
+                    const token = await api.Register(email, username, password)
                     set({token: token, isAuthenticated: true})
                 }
             }), {

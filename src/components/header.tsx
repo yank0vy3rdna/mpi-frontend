@@ -6,6 +6,7 @@ import {useNavigate} from "react-router-dom";
 import Heading from "./heading";
 import useAuth from "../hooks/useAuth";
 import Menu from "./menu";
+import fullPaths from "../router/routes";
 
 export default function Header() {
     const navigate = useNavigate()
@@ -18,7 +19,7 @@ export default function Header() {
         >
             <Flex opacity={"100%"} width={"100%"}>
                 <Center p={"10px"} pl={"30px"} pt={"0"} onClick={() => {
-                    navigate("/")
+                    navigate(fullPaths.homePath)
                 }}>
                     <img width={"90px"} src={"/img/taverna.webp"}/>
                 </Center>
@@ -26,7 +27,7 @@ export default function Header() {
                     isAuthenticated ? <Center color={"white"} pl={5}><Menu/></Center> : <></>
                 }
                 <Center onClick={() => {
-                    navigate("/")
+                    navigate(fullPaths.homePath)
                 }} pl={"5"}>
                     <Heading>Units delivery HOMM</Heading>
                 </Center>
@@ -34,7 +35,7 @@ export default function Header() {
                 <Spacer/>
                 {
                     isAuthenticated ?
-                        <Center onClick={() => navigate("/cart")}><Icon color={"#d2ad50"} opacity={"100%"} w={"30px"}
+                        <Center onClick={() => navigate(fullPaths.cartPath)}><Icon color={"#d2ad50"} opacity={"100%"} w={"30px"}
                                                                         h={"30px"}
                                                                         as={TiShoppingCart}/></Center> : <></>
                 }
@@ -50,9 +51,20 @@ export default function Header() {
                 {
                     isAuthenticated
                         ? <></>
-                        : <Center color={"white"} pl={20} pr={10}><Button text={"Sign in"} onClick={() => {
-                            navigate("/login")
-                        }}/> </Center>
+                        : <Center color={"white"} pr={7}>
+                            <Button text={"Sign in"} onClick={() => {
+                                navigate(fullPaths.loginPath)
+                            }}/>
+                        </Center>
+                }
+                {
+                    isAuthenticated
+                        ? <></>
+                        : <Center color={"white"} pr={10}>
+                            <Button text={"Sign up"} onClick={() => {
+                                navigate(fullPaths.registerPath)
+                            }}/>
+                        </Center>
                 }
             </Flex>
         </Flex>

@@ -1,8 +1,12 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import useTokenStore from "../store/tokenStore";
+import fullPaths from "../router/routes";
 
 const parseJwt = (token: string) => {
+    if (token === "") {
+        return {}
+    }
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
@@ -14,6 +18,13 @@ const parseJwt = (token: string) => {
 interface jwtDataI {
     exp: string
     sub: string
+    role: Role
+}
+
+export enum Role {
+    COURIER = "COURIER",
+    USER = "USER",
+    OWNER = "OWNER"
 }
 
 export default function useAuth(): [string, boolean, jwtDataI, () => void] {
@@ -25,18 +36,19 @@ export default function useAuth(): [string, boolean, jwtDataI, () => void] {
         }
         if (Number(parseJwt(token)["exp"]) <= Date.now() / 1000) {
             logout()
-            navigate("/login")
+            navigate(fullPaths.loginPath)
         }
     })
     let jwtData: jwtDataI = {
         exp: "",
-        sub: "Andrey"
+        sub: "Andrey",
+        role: Role.USER
     }
     if (isAuthenticated) {
         jwtData = parseJwt(token)
     }
     return [token, isAuthenticated, jwtData, () => {
         logout()
-        navigate("/login")
+        navigate(fullPaths.loginPath)
     }]
 }
