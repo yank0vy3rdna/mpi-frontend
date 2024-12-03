@@ -1,15 +1,15 @@
-import {borderStyle} from "../../components/border";
-import {Box, Center, Flex, Image} from "@chakra-ui/react";
+import { borderStyle } from "../../components/border";
+import { Box, Center, Flex, Image } from "@chakra-ui/react";
 import useMobile from "../../hooks/isMobile";
-import {MakeApiFromLocalStorage, UnitDetails} from "../../api/interface";
-import {useLoaderData, useNavigate} from "react-router-dom";
+import { MakeApiFromLocalStorage, UnitDetails } from "../../api/interface";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import Heading from "../../components/heading";
 import useCartStore from "../../store/cartStore";
 import Button from "../../components/button";
 import fullPaths from "../../router/routes";
 import Gold from "../../components/gold";
 
-export async function UnitLoader({params}: any) {
+export async function UnitLoader({ params }: any) {
     const p = params as { unitId: number }
     return await MakeApiFromLocalStorage().UnitById(p.unitId)
 }
@@ -36,33 +36,33 @@ export default function Unit() {
             justifyContent={"space-between"}
         >
             <Heading>{data.name}</Heading>
-            <Center mt={"20px"} w={"100%"}> <Image src={data.pictureUrl}/></Center>
-            
+            <Center mt={"20px"} w={"100%"}> <Image src={data.pictureUrl} /></Center>
+
             <Box mt={"20px"}>{data.description}</Box>
-            <Box mt={"20px"}>Цена: {data.price}<Gold/></Box>
+            <Box mt={"20px"}>Цена: {data.price}<Gold /></Box>
 
             {
                 countInCart >= 1 ?
                     <Flex mt={"20px"} justifyContent={"space-around"}>
                         <Button text={"-"} onClick={() => {
                             removeFromCart(data.id)
-                        }}/>
+                        }} />
                         <Center>{countInCart}</Center>
                         <Button text={"+"} disabled={!ableToAddToCart} onClick={() => {
                             if (countInCart)
                                 addToCart(data.id)
-                        }}/>
+                        }} />
                     </Flex> :
                     <Box mt={"20px"}><Button text={"Добавить в корзину"} disabled={!ableToAddToCart} onClick={() => {
                         addToCart(data.id)
-                    }}/></Box>
+                    }} /></Box>
             }
             <Box mt={"20px"}><Button text={"Перейти в корзину"} onClick={() => {
                 navigate(fullPaths.cartPath)
-            }}/></Box>
+            }} /></Box>
             <Box mt={"20px"}><Button text={"Назад"} onClick={() => {
                 navigate(fullPaths.unitsPath)
-            }}/></Box>
+            }} /></Box>
         </Flex>
     </Center>
 }

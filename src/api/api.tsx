@@ -8,7 +8,9 @@ import {
     MakeAnOrderResponse,
     OrdersResponse, RegisterRequest,
     UnitDetails,
-    UnitsResponse
+    UnitsResponse,
+    CurrentBalanceResp,
+    TradesResponse
 } from "./interface";
 import axios from "axios";
 
@@ -31,6 +33,14 @@ export class Api implements Interface {
             },
         })
         return response.data.token
+    }
+    async CurrentBalance(): Promise<CurrentBalanceResp> {
+        const response = await axios.get<CurrentBalanceResp>(`${this.baseApiPath}/users/current`, {
+            headers: {
+                'Authorization': `Bearer ${this.token}`
+            }
+        })
+        return response.data
     }
 
     async Register(email: string, username: string, password: string): Promise<string> {
@@ -71,8 +81,8 @@ export class Api implements Interface {
     }
 
     async MakeAnOrder(cart: { [id: number]: number },
-                      latitude: number,
-                      longitude: number): Promise<MakeAnOrderResponse> {
+        latitude: number,
+        longitude: number): Promise<MakeAnOrderResponse> {
         const req: MakeAnOrderRequest = {
             orderUnits: [],
             latitude: latitude,
@@ -95,6 +105,23 @@ export class Api implements Interface {
 
     async Orders(): Promise<OrdersResponse> {
         const resp = await axios.get<OrdersResponse>(`${this.baseApiPath}/orders`, {
+            headers: {
+                'Authorization': `Bearer ${this.token}`
+            }
+        })
+        return resp.data
+    }
+
+    async Trades(): Promise<TradesResponse> {
+        const resp = await axios.get<TradesResponse>(`${this.baseApiPath}/trades/`, {
+            headers: {
+                'Authorization': `Bearer ${this.token}`
+            }
+        })
+        return resp.data
+    }
+    async TradesTop(): Promise<TradesResponse> {
+        const resp = await axios.get<TradesResponse>(`${this.baseApiPath}/trades/top/`, {
             headers: {
                 'Authorization': `Bearer ${this.token}`
             }
@@ -148,6 +175,18 @@ export class Api implements Interface {
 
     async HireCourier(orderId: string, courierId: number): Promise<void> {
         await axios.post(`${this.baseApiPath}/couriers/${courierId}/hire?orderId=${orderId}`, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.token}`
+            },
+        })
+    }
+
+    async MakeTrade(id: number, count: number): Promise<void> {
+        await axios.post(`${this.baseApiPath}/trades/trade`, {
+            id: id,
+            count: count
+        }, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${this.token}`

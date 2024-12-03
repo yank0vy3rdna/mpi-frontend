@@ -1,8 +1,8 @@
-import {IconButton, Menu as M, MenuButton, MenuItem, MenuList} from "@chakra-ui/react";
-import {HamburgerIcon} from '@chakra-ui/icons'
-import {useNavigate} from "react-router-dom";
+import { IconButton, Menu as M, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { HamburgerIcon } from '@chakra-ui/icons'
+import { useNavigate } from "react-router-dom";
 import fullPaths from "../router/routes";
-import useAuth, {Role} from "../hooks/useAuth";
+import useAuth, { Role } from "../hooks/useAuth";
 
 export default function Menu() {
     const navigate = useNavigate()
@@ -21,8 +21,9 @@ export default function Menu() {
             break
         case Role.USER:
             menuItems = [
-                ["Orders", fullPaths.ordersPath],
                 ["Order an Unit", fullPaths.unitsPath],
+                ["Orders", fullPaths.ordersPath],
+                ["Trade", fullPaths.tradeTopPath]
             ]
             break
     }
@@ -30,7 +31,7 @@ export default function Menu() {
         <MenuButton
             as={IconButton}
             aria-label='Options'
-            icon={<HamburgerIcon/>}
+            icon={<HamburgerIcon />}
             variant='outline'
         />
         <MenuList>

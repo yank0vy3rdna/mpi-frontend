@@ -31,6 +31,29 @@ export interface Interface {
     AnswerOrder(orderId: number, answer: boolean): Promise<void>
 
     CreateCourierAccount(email: string, username: string, password: string, price: number, pictureUrl: string): Promise<void>
+
+    CurrentBalance(): Promise<CurrentBalanceResp>
+
+    Trades(): Promise<TradesResponse>
+
+    TradesTop(): Promise<TradesResponse>
+
+    MakeTrade(id: number, count: number): Promise<void>
+}
+interface Trade {
+    pictureUrl: string,
+    name: string,
+    id: number,
+    count: number,
+    countAvailableToSell: number
+    price: number
+}
+export interface TradesResponse {
+    trades: Trade[]
+}
+
+export interface CurrentBalanceResp {
+    gold: number,
 }
 
 interface Order {
@@ -135,7 +158,7 @@ export interface LoginResponse {
     token: string
 }
 
-const useMockAPI = true
+const useMockAPI = false
 export default function useApi(): Interface {
     const token = useTokenStore(state => state.token)
     if (useMockAPI) {

@@ -6,17 +6,25 @@ import {
     OrderResponse,
     OrdersResponse,
     UnitDetails,
-    UnitsResponse
+    UnitsResponse,
+    CurrentBalanceResp,
+    TradesResponse
 } from "./interface";
 
 export class mockApi implements Interface {
     async Login(username: string, password: string): Promise<string> {
         // // role USER
-        //return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwicm9sZSI6IlVTRVIifQ.hOQCrzSNocZajFKzxm_qLiBHHrwvIUqH4xpPchzRs_o"
+        return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwicm9sZSI6IlVTRVIifQ.hOQCrzSNocZajFKzxm_qLiBHHrwvIUqH4xpPchzRs_o"
         // // role OWNER
         // return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwicm9sZSI6Ik9XTkVSIn0.k2PU54UY0Niw05RMrc-6ce70CIpL7qPhikgg6Kd4Ut0"
         // role COURIER
-        return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJyb2xlIjoiQ09VUklFUiJ9.ezkuUYOjheLLueyiiWW0vdgjPuGacvKZVDb8wWC1WsA"
+        //return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJyb2xlIjoiQ09VUklFUiJ9.ezkuUYOjheLLueyiiWW0vdgjPuGacvKZVDb8wWC1WsA"
+    }
+
+    async CurrentBalance(): Promise<CurrentBalanceResp> {
+        return {
+            gold: 10,
+        }
     }
 
     async Register(email: string, username: string, password: string): Promise<string> {
@@ -39,6 +47,74 @@ export class mockApi implements Interface {
                     price: 5,
                 }
             ],
+        }
+    }
+    async TradesTop(): Promise<TradesResponse> {
+        return {
+            trades: [
+                {
+                    id: 4,
+                    name: "sulfur",
+                    price: 7,
+                    count: 7,
+                    countAvailableToSell: 10,
+                    pictureUrl: "/img/sulfur.webp"
+                },
+                {
+                    id: 3,
+                    name: "crystal",
+                    price: 10,
+                    count: 7,
+                    countAvailableToSell: 3,
+                    pictureUrl: "/img/crystal.webp"
+                },
+                {
+                    id: 2,
+                    name: "ore",
+                    price: 5,
+                    count: 7,
+                    countAvailableToSell: 10,
+                    pictureUrl: "/img/ore.webp"
+                },
+            ]
+        }
+    }
+    async Trades(): Promise<TradesResponse> {
+        return {
+            trades: [
+                {
+                    id: 1,
+                    name: "wood",
+                    price: 3,
+                    count: 7,
+                    countAvailableToSell: 10,
+                    pictureUrl: "/img/wood.webp"
+                },
+                {
+                    id: 2,
+                    name: "ore",
+                    price: 5,
+                    count: 7,
+                    countAvailableToSell: 10,
+                    pictureUrl: "/img/ore.webp"
+                },
+                {
+                    id: 4,
+                    name: "sulfur",
+                    price: 7,
+                    count: 7,
+                    countAvailableToSell: 10,
+                    pictureUrl: "/img/sulfur.webp"
+                },
+                {
+                    id: 3,
+                    name: "crystal",
+                    price: 10,
+                    count: 7,
+                    countAvailableToSell: 3,
+                    pictureUrl: "/img/crystal.webp"
+                },
+            ]
         }
     }
 
@@ -541,6 +617,9 @@ export class mockApi implements Interface {
         }
     }
 
+    async MakeTrade(id: number, count: number): Promise<void> {
+        return
+    }
     async UnitById(id: number): Promise<UnitDetails> {
         return {
             id: id,

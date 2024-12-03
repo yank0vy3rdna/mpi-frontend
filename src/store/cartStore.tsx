@@ -1,5 +1,5 @@
-import {create} from "zustand";
-import {devtools, persist} from "zustand/middleware";
+import { create } from "zustand";
+import { devtools, persist } from "zustand/middleware";
 
 interface State {
     cart: { [id: number]: number }
@@ -34,7 +34,7 @@ export const useCartStore = create<State & Action>()(
                     })
                 },
                 clearCart() {
-                    set({cart: {}})
+                    set({ cart: {} })
                 },
                 removeFromCart(unitId: number) {
                     if (Object.keys(get().cart).indexOf(String(unitId)) === -1) {
@@ -53,11 +53,11 @@ export const useCartStore = create<State & Action>()(
                     })
                 }
             }), {
-                partialize: (state) => ({
-                    cart: state.cart,
-                }),
-                name: "cartStore"
-            }
+            partialize: (state) => ({
+                cart: state.cart,
+            }),
+            name: "cartStore"
+        }
         )
     )
 )
