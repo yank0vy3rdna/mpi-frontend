@@ -3,6 +3,7 @@ import {
     CouriersResponse,
     Interface,
     MakeAnOrderResponse,
+    OrderResponse,
     OrdersResponse,
     UnitDetails,
     UnitsResponse
@@ -11,7 +12,7 @@ import {
 export class mockApi implements Interface {
     async Login(username: string, password: string): Promise<string> {
         // // role USER
-        // return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwicm9sZSI6IlVTRVIifQ.hOQCrzSNocZajFKzxm_qLiBHHrwvIUqH4xpPchzRs_o"
+        //return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwicm9sZSI6IlVTRVIifQ.hOQCrzSNocZajFKzxm_qLiBHHrwvIUqH4xpPchzRs_o"
         // // role OWNER
         // return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwicm9sZSI6Ik9XTkVSIn0.k2PU54UY0Niw05RMrc-6ce70CIpL7qPhikgg6Kd4Ut0"
         // role COURIER
@@ -23,9 +24,9 @@ export class mockApi implements Interface {
     }
 
     async MakeAnOrder(cart: { [id: number]: number },
-                      latitude: number,
-                      longitude: number): Promise<MakeAnOrderResponse> {
-        return {success: true, courier: null, orderId: 1}
+        latitude: number,
+        longitude: number): Promise<MakeAnOrderResponse> {
+        return { success: true, courier: null, orderId: 1 }
     }
 
     async Couriers(): Promise<CouriersResponse> {
@@ -41,6 +42,52 @@ export class mockApi implements Interface {
         }
     }
 
+    async Order(id: number): Promise<OrderResponse> {
+        return {
+            order: {
+                id: id,
+                status: "заказан",
+                orderTime: "2024-12-03 12:59",
+                orderUnits: [],
+                currentCoord: {
+                    lat: 75,
+                    lon: 75,
+                },
+                fullPath: [
+                    {
+                        lat: 75,
+                        lon: 25,
+                    },
+                    {
+                        lat: 50,
+                        lon: 50,
+                    },
+                    {
+                        lat: 75,
+                        lon: 75,
+                    },
+                    {
+                        lat: 90,
+                        lon: 90,
+                    },
+                ],
+                courier: null
+            },
+            map: {
+                roads: [
+                    { id: 1, points: [{ lat: 0, lon: 0 }, { lat: 100, lon: 100 }] },
+                    { id: 2, points: [{ lat: 0, lon: 100 }, { lat: 100, lon: 0 }] }
+                ],
+                crossRoads: [
+                    {
+                        roadIds: [1, 2],
+                        point: { lat: 50, lon: 50 }
+                    }
+                ]
+            }
+        }
+    }
+
     async CouriersOrder(): Promise<CourierOrdersResponse> {
         return {
             order: {
@@ -48,10 +95,43 @@ export class mockApi implements Interface {
                 status: "заказан",
                 orderTime: "2024-12-03 12:59",
                 orderUnits: [],
-                lat: 1,
-                lon: 1,
+                currentCoord: {
+                    lat: 75,
+                    lon: 75,
+                },
+                fullPath: [
+                    {
+                        lat: 75,
+                        lon: 25,
+                    },
+                    {
+                        lat: 50,
+                        lon: 50,
+                    },
+                    {
+                        lat: 75,
+                        lon: 75,
+                    },
+                    {
+                        lat: 90,
+                        lon: 90,
+                    },
+                ],
                 courier: null
+            },
+            map: {
+                roads: [
+                    { id: 1, points: [{ lat: 0, lon: 0 }, { lat: 100, lon: 100 }] },
+                    { id: 2, points: [{ lat: 0, lon: 100 }, { lat: 100, lon: 0 }] }
+                ],
+                crossRoads: [
+                    {
+                        roadIds: [1, 2],
+                        point: { lat: 50, lon: 50 }
+                    }
+                ]
             }
+
         }
     }
 
@@ -77,8 +157,28 @@ export class mockApi implements Interface {
                 status: "заказан",
                 orderTime: "2024-12-03 12:59",
                 orderUnits: [],
-                lat: 1,
-                lon: 1,
+                currentCoord: {
+                    lat: 75,
+                    lon: 75,
+                },
+                fullPath: [
+                    {
+                        lat: 75,
+                        lon: 25,
+                    },
+                    {
+                        lat: 50,
+                        lon: 50,
+                    },
+                    {
+                        lat: 75,
+                        lon: 75,
+                    },
+                    {
+                        lat: 90,
+                        lon: 90,
+                    },
+                ],
                 courier: null
             }]
         }

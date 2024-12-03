@@ -6,6 +6,7 @@ import Login from "../routes/anonymous/login";
 import Register from "../routes/anonymous/register";
 import UserRoleChecker from "../components/roleChecker/user";
 import Orders, {OrdersLoader} from "../routes/user/orders";
+import Order, {OrderLoader} from "../routes/user/order";
 import {Order as CourierOrders, OrdersLoader as CourierOrdersLoader} from "../routes/courier/order";
 import Units, {UnitsLoader} from "../routes/user/units";
 import Unit, {UnitLoader} from "../routes/user/unit";
@@ -29,9 +30,11 @@ const userRolePartialPath = "user/"
 const ordersPartialPath = "orders/"
 const unitsPartialPath = "units/"
 const cartPartialPath = "cart/"
-const hireCourierPartialPathBuilder = (x: string) => `orders/${x}/hireCourier`
-const unitPartialPathBuilder = (x: string) => `units/${x}`
+const hireCourierPartialPathBuilder = (x: string|number) => `orders/${x}/hireCourier`
+const unitPartialPathBuilder = (x: string|number) => `units/${x}`
+const orderPartialPathBuilder = (x: string|number) => `orders/${x}`
 const hireCourierPartialPath = hireCourierPartialPathBuilder(":orderId")
+const orderPartialPath = orderPartialPathBuilder(":orderId")
 const unitPartialPath = unitPartialPathBuilder(":unitId")
 
 // owner
@@ -54,8 +57,9 @@ const fullPaths = {
     ordersPath: basePath + userRolePartialPath + ordersPartialPath,
     unitsPath: basePath + userRolePartialPath + unitsPartialPath,
     cartPath: basePath + userRolePartialPath + cartPartialPath,
-    unitPathBuilder: (x: string) => basePath + userRolePartialPath + unitPartialPathBuilder(x),
-    hireCourierPathBuilder: (x: string) => basePath + userRolePartialPath + hireCourierPartialPathBuilder(x),
+    unitPathBuilder: (x: number) => basePath + userRolePartialPath + unitPartialPathBuilder(x),
+    hireCourierPathBuilder: (x: number) => basePath + userRolePartialPath + hireCourierPartialPathBuilder(x),
+    orderPathBuilder: (x: number) => basePath + userRolePartialPath + orderPartialPathBuilder(x),
 
     // owner
     newCourierPath: basePath + ownerRolePartialPath + newCourierPartialPath,
@@ -94,6 +98,11 @@ const routes = [{
                     path: ordersPartialPath,
                     element: <Orders/>,
                     loader: OrdersLoader
+                },
+                {
+                    path: orderPartialPath,
+                    element: <Order/>,
+                    loader: OrderLoader
                 },
                 {
                     path: hireCourierPartialPath,

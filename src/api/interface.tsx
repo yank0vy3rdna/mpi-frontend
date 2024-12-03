@@ -1,6 +1,6 @@
-import {mockApi} from "./mock";
+import { mockApi } from "./mock";
 import useTokenStore from "../store/tokenStore";
-import {Api} from "./api";
+import { Api } from "./api";
 
 export interface Interface {
     Login(username: string, password: string): Promise<string>
@@ -10,11 +10,13 @@ export interface Interface {
     UnitById(id: number): Promise<UnitDetails>
 
     MakeAnOrder(cart: { [id: number]: number },
-                latitude: number,
-                longitude: number
+        latitude: number,
+        longitude: number
     ): Promise<MakeAnOrderResponse>
 
     Orders(): Promise<OrdersResponse>
+
+    Order(id: number): Promise<OrderResponse>
 
     Register(email: string, username: string, password: string): Promise<string>
 
@@ -36,9 +38,33 @@ interface Order {
     status: string,
     courier: Courier | null,
     orderTime: string,
-    lat: number,
-    lon: number,
+    currentCoord: Coord,
+    fullPath: Coord[],
     orderUnits: { unitId: number, count: number }[],
+}
+export interface Coord {
+    lat: number,
+    lon: number
+}
+
+interface Road {
+    id: number
+    points: Coord[]
+}
+
+interface CrossRoad {
+    roadIds: number[]
+    point: Coord
+}
+
+export interface LandMap {
+    roads: Road[]
+    crossRoads: CrossRoad[]
+}
+
+export interface OrderResponse {
+    order: Order
+    map: LandMap
 }
 
 export interface OrdersResponse {
@@ -58,6 +84,7 @@ export interface CouriersResponse {
 
 export interface CourierOrdersResponse {
     order: Order | null,
+    map: LandMap
 }
 
 export interface MakeAnOrderResponse {
@@ -108,17 +135,17 @@ export interface LoginResponse {
     token: string
 }
 
-const useMockAPI = false
+const useMockAPI = true
 export default function useApi(): Interface {
     const token = useTokenStore(state => state.token)
-    if (useMockAPI){
+    if (useMockAPI) {
         return new mockApi()
     }
     return new Api(token)
 }
 
 export function MakeApiFromLocalStorage(): Interface {
-    if (useMockAPI){
+    if (useMockAPI) {
         return new mockApi()
     }
     let tokenStore = window.localStorage.getItem("tokenStore")

@@ -38,7 +38,7 @@ export default function UnitCard({pictureUrl, name, id, count, price}: {
                   flexDirection={"column"}
                   justifyContent={"space-around"}
                   onClick={() => {
-                      navigate(fullPaths.unitPathBuilder(String(id)))
+                      navigate(fullPaths.unitPathBuilder(id))
                   }}
             >
                 <Center h={"50%"} w={"100%"}>

@@ -1,9 +1,9 @@
-import {MakeApiFromLocalStorage, OrdersResponse, UnitsResponse} from "../../api/interface";
-import {useLoaderData, useNavigate} from "react-router-dom";
-import {borderStyle} from "../../components/border";
+import { MakeApiFromLocalStorage, OrdersResponse, UnitsResponse } from "../../api/interface";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import { borderStyle } from "../../components/border";
 import Heading from "../../components/heading";
-import {Box, Center, Flex} from "@chakra-ui/react";
-import {Td, Th, Tr} from "../../components/table";
+import { Box, Center, Flex } from "@chakra-ui/react";
+import { Td, Th, Tr } from "../../components/table";
 import useMobile from "../../hooks/isMobile";
 import Button from "../../components/button";
 import fullPaths from "../../router/routes";
@@ -43,7 +43,7 @@ export default function Orders() {
 
                 <Button text={"Сделать первый заказ"} onClick={() => {
                     navigate(fullPaths.unitsPath)
-                }}/>
+                }} />
             </Flex>
         </Center>
     }
@@ -60,43 +60,34 @@ export default function Orders() {
             <Heading>Заказы</Heading>
             <Box as={"table"} __css={borderStyle} m={"20px"}>
                 <thead>
-                <Tr>
-                    <Th>Id заказа</Th>
-                    <Th>Дата заказа</Th>
-                    <Th>Статус заказа</Th>
-                    <Th>Широта</Th>
-                    <Th>Долгота</Th>
-                    <Th>Список</Th>
-                    <Th>Курьер</Th>
-                </Tr>
+                    <Tr>
+                        <Th>Id заказа</Th>
+                        <Th>Дата заказа</Th>
+                        <Th>Статус заказа</Th>
+                        <Th>Список</Th>
+                    </Tr>
                 </thead>
                 <tbody>
-                {data.Orders.orders.map((x) => <Tr key={x.id}>
-                    <Td>{x.id}</Td>
-                    <Td>{x.orderTime}</Td>
-                    <Td>{x.status}</Td>
-                    <Td>{x.lat}</Td>
-                    <Td>{x.lon}</Td>
-                    <Td>{x.orderUnits.map((x) => {
-                        const unit = data.Units.units.find((u) => u.id === x.unitId)
+                    {
+                        data.Orders.orders.map((x) => <Tr key={x.id} onClick={() => {
+                            navigate(fullPaths.orderPathBuilder(x.id))
+                        }}>
+                            <Td>{x.id}</Td>
+                            <Td>{x.orderTime}</Td>
+                            <Td>{x.status}</Td>
+                            <Td>{x.orderUnits.map((x) => {
+                                const unit = data.Units.units.find((u) => u.id === x.unitId)
 
-                        return `${unit?.name} - ${x.count}`
-                    }).join(", ")}</Td>
-                    <Td>
-                        {
-                            x.status !== "CANCELED" ? (x.courier === null
-                                ? <Button text={"Нанять курьера"} onClick={() => {
-                                    navigate(fullPaths.hireCourierPathBuilder(String(x.id)))
-                                }}/>
-                                : `${x.courier.name}(${x.courier.id})`) : <></>
-                        }
-                    </Td>
-                </Tr>)}
+                                return `${unit?.name} - ${x.count}`
+                            }).join(", ")}</Td>
+                        </Tr>
+                        )
+                    }
                 </tbody>
             </Box>
             <Center mt={"30px"}><Button text={"Новый заказ"} onClick={() => {
                 navigate(fullPaths.unitsPath)
-            }}/></Center>
+            }} /></Center>
         </Flex>
     </Center>
 }

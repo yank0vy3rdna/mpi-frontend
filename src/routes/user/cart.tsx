@@ -111,7 +111,7 @@ export default function Cart() {
                 </thead>
                 <tbody>
                 {cartPrefilled.map((x) => <Tr key={x.foundUnit.id} onClick={() => {
-                    navigate(fullPaths.unitPathBuilder(String(x.foundUnit.id)))
+                    navigate(fullPaths.unitPathBuilder(x.foundUnit.id))
                 }}>
                     <Td>{x.foundUnit.name}</Td>
                     <Td>{x.countInCart}</Td>
@@ -178,7 +178,7 @@ export default function Cart() {
                     }
                     clearCart()
                     if (res.courier === null) {
-                        navigate(fullPaths.hireCourierPathBuilder(String(res.orderId)))
+                        navigate(fullPaths.hireCourierPathBuilder(res.orderId))
                     } else {
                         navigate(fullPaths.ordersPath)
                     }

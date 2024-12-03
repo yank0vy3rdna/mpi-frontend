@@ -1,11 +1,12 @@
-import useApi, {CourierOrdersResponse, MakeApiFromLocalStorage, UnitsResponse} from "../../api/interface";
-import {useLoaderData, useRevalidator} from "react-router-dom";
-import {borderStyle} from "../../components/border";
+import useApi, { CourierOrdersResponse, MakeApiFromLocalStorage, UnitsResponse } from "../../api/interface";
+import { useLoaderData, useRevalidator } from "react-router-dom";
+import { borderStyle } from "../../components/border";
 import Heading from "../../components/heading";
-import React, {useEffect, useRef} from "react";
-import {Box, Center, Flex} from "@chakra-ui/react";
+import React, { useEffect, useRef } from "react";
+import { Box, Center, Flex } from "@chakra-ui/react";
 import useMobile from "../../hooks/isMobile";
 import Button from "../../components/button";
+import OrderMap from "../../components/map";
 
 export async function OrdersLoader() {
     return {
@@ -46,8 +47,6 @@ export function Order() {
                             <Box>ID: {data.Order.order.id}</Box>
                             <Box>Время заказа: {data.Order.order.orderTime}</Box>
                             <Box>Статус заказа:{data.Order.order.status}</Box>
-                            <Box>Широта: {data.Order.order.lat}</Box>
-                            <Box>Долгота: {data.Order.order.lon}</Box>
                             <Box>{data.Order.order.orderUnits.map((x) => {
                                 const unit = data.Units.units.find((u) => u.id === x.unitId)
 
@@ -66,7 +65,7 @@ export function Order() {
                                 await api.AnswerOrder(data.Order.order.id, true)
                                 revalidator.revalidate()
 
-                            }}/>
+                            }} />
                             <Button text={"Отклонить"} onClick={async () => {
                                 if (data.Order.order === null) {
                                     return
@@ -74,8 +73,12 @@ export function Order() {
                                 await api.AnswerOrder(data.Order.order.id, false)
                                 revalidator.revalidate()
 
-                            }}/>
-                        </Flex> : <></>
+                            }} />
+                        </Flex> : <OrderMap
+                            map={data.Order.map}
+                            currentPoint={data.Order.order.currentCoord}
+                            fullPath={data.Order.order.fullPath}
+                        />
                         }
                     </>
             }

@@ -37,6 +37,7 @@ export default function Unit() {
         >
             <Heading>{data.name}</Heading>
             <Center mt={"20px"} w={"100%"}> <Image src={data.pictureUrl}/></Center>
+            
             <Box mt={"20px"}>{data.description}</Box>
             <Box mt={"20px"}>Цена: {data.price}<Gold/></Box>
 

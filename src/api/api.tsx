@@ -1,6 +1,7 @@
 import {
     CourierOrdersResponse,
     CouriersResponse,
+    OrderResponse,
     Interface,
     LoginRequest,
     LoginResponse, MakeAnOrderRequest,
@@ -94,6 +95,14 @@ export class Api implements Interface {
 
     async Orders(): Promise<OrdersResponse> {
         const resp = await axios.get<OrdersResponse>(`${this.baseApiPath}/orders`, {
+            headers: {
+                'Authorization': `Bearer ${this.token}`
+            }
+        })
+        return resp.data
+    }
+    async Order(id: number): Promise<OrderResponse> {
+        const resp = await axios.get<OrderResponse>(`${this.baseApiPath}/orders/${id}`, {
             headers: {
                 'Authorization': `Bearer ${this.token}`
             }
