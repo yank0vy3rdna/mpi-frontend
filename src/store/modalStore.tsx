@@ -13,7 +13,7 @@ interface Action {
 }
 
 const initialState: State = {
-    isOpen: true,
+    isOpen: false,
     header: "Астрологи предсказали!",
     body: "Ретроградный Марс не позволит увеличить добычу руды. Цены на руду выросли.",
 }
