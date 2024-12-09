@@ -7,6 +7,8 @@ import { Box, Center, Flex } from "@chakra-ui/react";
 import useMobile from "../../hooks/isMobile";
 import Button from "../../components/button";
 import OrderMap from "../../components/map";
+import useModalStore from "../../store/modalStore";
+import useWSStore from "../../store/wsStore";
 
 export async function OrdersLoader() {
     return {
@@ -17,16 +19,27 @@ export async function OrdersLoader() {
 
 export function Order() {
     let data = useLoaderData() as { Order: CourierOrdersResponse, Units: UnitsResponse };
+    const [newAlert] = useModalStore(state => [state.newAlert])
+
+    const [registerMessageHandler] = useWSStore(state => [state.registerMessageHandler])
     const isMobile = useMobile()
     const api = useApi()
     let revalidator = useRevalidator();
-    useEffect(() => {
+    /*useEffect(() => {
         const timer = setInterval(() => {
             revalidator.revalidate()
         }, 2000)
 
         return () => clearInterval(timer);
+    }, [])*/
+
+    useEffect(() => {
+        registerMessageHandler("new_courier_order", (data) => {
+            newAlert("Вам назначен заказ", "Доставьте войска клиенту")
+            revalidator.revalidate()
+        })
     }, [])
+
 
     return <Center height={"80vh"}>
         <Flex

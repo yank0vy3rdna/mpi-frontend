@@ -17,6 +17,7 @@ export default function Header() {
         <Flex
             border={"1px solid #ad8e42"}
             background={"url(/img/homm3-border-bg.png) 0 0 repeat #0d0c0a;"}
+            fontFamily={"@fontsource/merriweather"}
             width={"100%"} height={"100%"} opacity={"80%"}
         >
             <Flex opacity={"100%"} width={"100%"}>

@@ -1,12 +1,13 @@
-import {extendTheme} from "@chakra-ui/react";
+import { extendTheme } from "@chakra-ui/react";
 import menuTheme from "./menu";
 import buttonTheme from "./button";
-
+import { modalTheme } from "./modal";
+import "@fontsource/merriweather";
 
 const theme = extendTheme({
     fonts: {
-        heading: '"Times New Roman", sans-serif',
-        body: '"Times New Roman", sans-serif',
+        heading: '"Merriweather", sans-serif',
+        body: '"Merriweather", sans-serif',
     },
     colors: {
         brand: {
@@ -17,7 +18,8 @@ const theme = extendTheme({
     },
     components: {
         Menu: menuTheme,
-        Button: buttonTheme
+        Button: buttonTheme,
+        Modal: modalTheme,
     },
 })
 export default theme

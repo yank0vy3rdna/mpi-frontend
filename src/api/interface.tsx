@@ -158,7 +158,7 @@ export interface LoginResponse {
     token: string
 }
 
-const useMockAPI = false
+const useMockAPI = true
 export default function useApi(): Interface {
     const token = useTokenStore(state => state.token)
     if (useMockAPI) {

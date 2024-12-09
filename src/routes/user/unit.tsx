@@ -39,7 +39,7 @@ export default function Unit() {
             <Center mt={"20px"} w={"100%"}> <Image src={data.pictureUrl} /></Center>
 
             <Box mt={"20px"}>{data.description}</Box>
-            <Box mt={"20px"}>Цена: {data.price}<Gold /></Box>
+            <Box mt={"20px"}><Flex>Цена: {data.price}<Gold /></Flex></Box>
 
             {
                 countInCart >= 1 ?
