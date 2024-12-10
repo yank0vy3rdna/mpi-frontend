@@ -55,7 +55,12 @@ export interface TradesResponse {
 export interface CurrentBalanceResp {
     gold: number,
 }
-
+export interface OrderUnit {
+    unitId: number
+    count: number
+    position: Coord
+    pictureUrl: string
+}
 interface Order {
     id: number,
     status: string,
@@ -63,7 +68,7 @@ interface Order {
     orderTime: string,
     currentCoord: Coord,
     fullPath: Coord[],
-    orderUnits: { unitId: number, count: number }[],
+    orderUnits: OrderUnit[],
 }
 export interface Coord {
     lat: number,
@@ -158,7 +163,8 @@ export interface LoginResponse {
     token: string
 }
 
-const useMockAPI = true
+const useMockAPI = false
+
 export default function useApi(): Interface {
     const token = useTokenStore(state => state.token)
     if (useMockAPI) {

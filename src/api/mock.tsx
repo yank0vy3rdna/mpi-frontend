@@ -124,7 +124,17 @@ export class mockApi implements Interface {
                 id: id,
                 status: "заказан",
                 orderTime: "2024-12-03 12:59",
-                orderUnits: [],
+                orderUnits: [
+                    {
+                        unitId: 1,
+                        count: 3,
+                        pictureUrl: "/img/units/Чёрт(60).gif",
+                        position: {
+                            lat: 90,
+                            lon: 160
+                        }
+                    },
+                ],
                 currentCoord: {
                     lat: 110,
                     lon: 210,
@@ -375,7 +385,17 @@ export class mockApi implements Interface {
                 id: 1,
                 status: "заказан",
                 orderTime: "2024-12-03 12:59",
-                orderUnits: [],
+                orderUnits: [
+                    {
+                        unitId: 1,
+                        count: 3,
+                        pictureUrl: "/img/units/Чёрт(60).gif",
+                        position: {
+                            lat: 150,
+                            lon: 200
+                        }
+                    },
+                ],
                 currentCoord: {
                     lat: 75,
                     lon: 75,

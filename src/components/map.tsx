@@ -2,9 +2,9 @@ import { Stage, Graphics, Sprite } from '@pixi/react';
 import { Application, Graphics as PixiGraphics, ICanvas } from 'pixi.js';
 import { useCallback, useEffect, useState } from 'react';
 import useMobile from '../hooks/isMobile';
-import { LandMap, Coord } from '../api/interface';
+import { LandMap, Coord, OrderUnit } from '../api/interface';
 
-export default function OrderMap({ map, currentPoint, fullPath }: { map: LandMap, currentPoint: Coord, fullPath: Coord[] }) {
+export default function OrderMap({ map, currentPoint, fullPath, units }: { map: LandMap, currentPoint: Coord, fullPath: Coord[], units: OrderUnit[] }) {
     const isMobile = useMobile()
     const [app, setApp] = useState<Application<ICanvas>>();
 
@@ -81,6 +81,8 @@ export default function OrderMap({ map, currentPoint, fullPath }: { map: LandMap
         ])
         g.endFill()
 
+
+
     }, [fullPath, currentPoint, isMobile])
 
     const backgroundUrl = "/img/map.jpg"
@@ -98,8 +100,21 @@ export default function OrderMap({ map, currentPoint, fullPath }: { map: LandMap
                 y={0}
                 scale={scaleFactor}
             />
+
             <Graphics draw={draw} />
+            {
+                units.map((unit) => <Sprite
+                    key={unit.unitId}
+                    image={unit.pictureUrl}
+                    x={(unit.position.lat) * coordMultiplier}
+                    y={(unit.position.lon) * coordMultiplier}
+                    scale={coordMultiplier * 0.8}
+                    anchor={{ x: 0.5, y: 0.7 }}
+                />)
+            }
             {currentPoint.lat == -1 ? <></> : <Graphics draw={drawTriangle} />}
+
+
         </Stage >
     );
 }

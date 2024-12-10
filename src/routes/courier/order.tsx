@@ -2,7 +2,7 @@ import useApi, { CourierOrdersResponse, MakeApiFromLocalStorage, UnitsResponse }
 import { useLoaderData, useRevalidator } from "react-router-dom";
 import { borderStyle } from "../../components/border";
 import Heading from "../../components/heading";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { Box, Center, Flex } from "@chakra-ui/react";
 import useMobile from "../../hooks/isMobile";
 import Button from "../../components/button";
@@ -25,13 +25,6 @@ export function Order() {
     const isMobile = useMobile()
     const api = useApi()
     let revalidator = useRevalidator();
-    /*useEffect(() => {
-        const timer = setInterval(() => {
-            revalidator.revalidate()
-        }, 2000)
-
-        return () => clearInterval(timer);
-    }, [])*/
 
     useEffect(() => {
         registerMessageHandler("new_courier_order", (data) => {
@@ -91,6 +84,7 @@ export function Order() {
                             map={data.Order.map}
                             currentPoint={data.Order.order.currentCoord}
                             fullPath={data.Order.order.fullPath}
+                            units={data.Order.order.orderUnits}
                         />
                         }
                     </>

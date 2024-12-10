@@ -1,13 +1,14 @@
 import { MakeApiFromLocalStorage, OrderResponse } from "../../api/interface";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useRevalidator } from "react-router-dom";
 import { borderStyle } from "../../components/border";
 import Heading from "../../components/heading";
 import { Box, Center, Flex } from "@chakra-ui/react";
 import useMobile from "../../hooks/isMobile";
 import Button from "../../components/button";
 import fullPaths from "../../router/routes";
-import React from "react";
+import React, { useEffect } from "react";
 import OrderMap from "../../components/map";
+import useWSStore from "../../store/wsStore";
 
 type ApiResp = {
     Order: OrderResponse,
@@ -25,6 +26,14 @@ export default function Order() {
     const isMobile = useMobile()
     const navigate = useNavigate()
     const data = useLoaderData() as ApiResp;
+    const [registerMessageHandler] = useWSStore(state => [state.registerMessageHandler])
+    let revalidator = useRevalidator();
+
+    useEffect(() => {
+        registerMessageHandler("order_update", () => {
+            revalidator.revalidate()
+        })
+    }, [])
 
     return <Center height={"80vh"}>
         <Flex
@@ -43,6 +52,7 @@ export default function Order() {
                 map={data.Order.map}
                 currentPoint={data.Order.order.currentCoord}
                 fullPath={data.Order.order.fullPath}
+                units={data.Order.order.orderUnits}
             />
 
             {
