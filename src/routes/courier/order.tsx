@@ -21,16 +21,20 @@ export function Order() {
     let data = useLoaderData() as { Order: CourierOrdersResponse, Units: UnitsResponse };
     const [newAlert] = useModalStore(state => [state.newAlert])
 
-    const [registerMessageHandler] = useWSStore(state => [state.registerMessageHandler])
+    const [registerMessageHandler, deregisterMessageHandler] = useWSStore(state => [state.registerMessageHandler, state.deregisterMessageHandler])
     const isMobile = useMobile()
     const api = useApi()
     let revalidator = useRevalidator();
 
     useEffect(() => {
-        registerMessageHandler("new_courier_order", (data) => {
+        const messageType = "new_courier_order"
+        registerMessageHandler(messageType, (data) => {
             newAlert("Вам назначен заказ", "Доставьте войска клиенту")
             revalidator.revalidate()
         })
+        return () => {
+            deregisterMessageHandler(messageType)
+        }
     }, [])
 
 
@@ -80,12 +84,24 @@ export function Order() {
                                 revalidator.revalidate()
 
                             }} />
-                        </Flex> : <OrderMap
-                            map={data.Order.map}
-                            currentPoint={data.Order.order.currentCoord}
-                            fullPath={data.Order.order.fullPath}
-                            units={data.Order.order.orderUnits}
-                        />
+                        </Flex> : <>
+                            <OrderMap
+                                map={data.Order.map}
+                                currentPoint={data.Order.order.currentCoord}
+                                fullPath={data.Order.order.fullPath}
+                                units={data.Order.order.orderUnits}
+                            />
+                            <Box mt={"20px"}>
+                                <Button text={data.Order.order.status === "APPROVED" ? "Юнит забран" : "Войска доставлены"} onClick={async () => {
+                                    if (data.Order.order === null) {
+                                        return
+                                    }
+                                    await api.MakeStep()
+                                    revalidator.revalidate()
+                                }} />
+                            </Box>
+
+                        </>
                         }
                     </>
             }

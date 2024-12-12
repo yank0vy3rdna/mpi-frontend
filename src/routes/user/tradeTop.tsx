@@ -1,6 +1,6 @@
 import { Center, Flex, Heading } from "@chakra-ui/react";
 import { isMobile } from "pixi.js";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useRevalidator } from "react-router-dom";
 import { MakeApiFromLocalStorage, TradesResponse, UnitsResponse } from "../../api/interface";
 import { borderStyle } from "../../components/border";
 import Button from "../../components/button";
@@ -22,7 +22,7 @@ export default function TradeTop() {
         Trades: TradesResponse,
         Units: UnitsResponse
     }
-    console.log(document.referrer)
+    let revalidator = useRevalidator();
 
     const { gold } = useBalanceStore()
     const [cart, removeFromCart] = useCartStore(state => [
@@ -58,6 +58,7 @@ export default function TradeTop() {
                         count={trade.count}
                         price={trade.price}
                         countAvailableToSell={trade.countAvailableToSell}
+                        revalidate={revalidator.revalidate}
                     />
                 )}
             </Flex>

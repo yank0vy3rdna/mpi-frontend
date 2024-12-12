@@ -22,17 +22,24 @@ export async function OrderLoader({ params }: any): Promise<ApiResp> {
     }
 }
 
+function inArr(s: string, arr: string[]): boolean {
+    return arr.indexOf(s) !== -1
+}
 export default function Order() {
     const isMobile = useMobile()
     const navigate = useNavigate()
     const data = useLoaderData() as ApiResp;
-    const [registerMessageHandler] = useWSStore(state => [state.registerMessageHandler])
+    const [registerMessageHandler, deregisterMessageHandler] = useWSStore(state => [state.registerMessageHandler, state.deregisterMessageHandler])
     let revalidator = useRevalidator();
 
     useEffect(() => {
-        registerMessageHandler("order_update", () => {
+        const messageType = "order_update"
+        registerMessageHandler(messageType, () => {
             revalidator.revalidate()
         })
+        return () => {
+            deregisterMessageHandler(messageType)
+        }
     }, [])
 
     return <Center height={"80vh"}>
@@ -47,21 +54,28 @@ export default function Order() {
         >
             <Heading>{"Заказ " + data.Order.order.id}</Heading>
             <Box mt={"20px"}>Статус: {data.Order.order.status}</Box>
-
-            <OrderMap
-                map={data.Order.map}
-                currentPoint={data.Order.order.currentCoord}
-                fullPath={data.Order.order.fullPath}
-                units={data.Order.order.orderUnits}
-            />
+            {
+                data.Order.order.courier !== null ?
+                    <Box mt={"20px"}>Курьер {data.Order.order.courier.name} (id {data.Order.order.courier.id}) привезет ваш заказ`</Box> : <></>
+            }
+            {
+                data.Order.order.courier !== null ?
+                    <OrderMap
+                        map={data.Order.map}
+                        currentPoint={data.Order.order.currentCoord}
+                        fullPath={data.Order.order.fullPath}
+                        units={data.Order.order.orderUnits}
+                    /> : <></>
+            }
 
             {
-                data.Order.order.status !== "CANCELED" ? (data.Order.order.courier === null
+                data.Order.order.status === "NO_COURIER_AVAILABLE" && data.Order.order.courier === null
                     ? <Box mt={"20px"}><Button text={"Нанять курьера"} onClick={() => {
+                        console.log("hire courier")
                         navigate(fullPaths.hireCourierPathBuilder(data.Order.order.id))
-                    }} /></Box>
-                    : `${data.Order.order.courier.name}(${data.Order.order.courier.id})`) : <></>
+                    }} /></Box> : <></>
             }
+
 
             <Box mt={"20px"}><Button text={"К списку заказов"} onClick={() => {
                 navigate(fullPaths.ordersPath)

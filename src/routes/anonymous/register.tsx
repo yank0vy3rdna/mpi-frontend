@@ -1,26 +1,26 @@
-import {Box, Center, Flex, FormControl, FormLabel, Input} from "@chakra-ui/react";
-import {borderStyle} from "../../components/border";
+import { Box, Center, Flex, FormControl, FormLabel, Input } from "@chakra-ui/react";
+import { borderStyle } from "../../components/border";
 import useMobile from "../../hooks/isMobile";
 import Heading from "../../components/heading";
 import Button from "../../components/button";
 import useTokenStore from "../../store/tokenStore";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import useApi from "../../api/interface";
 import validate from "validate.js";
 
 const constraints = {
     email: {
         email: true,
-        length: {maximum: 255},
-        presence: {message: "is required"}
+        length: { maximum: 255 },
+        presence: { message: "is required" }
     },
     password: {
-        length: {maximum: 50, minimum: 5},
-        presence: {message: "is required"}
+        length: { maximum: 50, minimum: 5 },
+        presence: { message: "is required" }
     },
     username: {
-        length: {maximum: 50, minimum: 5},
-        presence: {message: "is required"}
+        length: { maximum: 50, minimum: 5 },
+        presence: { message: "is required" }
     },
 };
 
@@ -56,11 +56,11 @@ export default function Register() {
                     <Box color={"red"}>
                         {emailError}
                     </Box>
-                    <Input focusBorderColor={"#ad8e42"} borderColor={"#ad8e42"} _hover={{borderColor: "#ad8e42"}}
-                           autoComplete={"email"} placeholder='Email'
-                           onChange={(e) => {
-                               setEmail(e.currentTarget.value)
-                           }}
+                    <Input focusBorderColor={"#ad8e42"} borderColor={"#ad8e42"} _hover={{ borderColor: "#ad8e42" }}
+                        autoComplete={"email"} placeholder='Email'
+                        onChange={(e) => {
+                            setEmail(e.currentTarget.value)
+                        }}
                     />
                 </FormControl>
             </Center>
@@ -71,11 +71,11 @@ export default function Register() {
                     <Box color={"red"}>
                         {usernameError}
                     </Box>
-                    <Input focusBorderColor={"#ad8e42"} borderColor={"#ad8e42"} _hover={{borderColor: "#ad8e42"}}
-                           autoComplete={"username"} placeholder='Login'
-                           onChange={(e) => {
-                               setUsername(e.currentTarget.value)
-                           }}
+                    <Input focusBorderColor={"#ad8e42"} borderColor={"#ad8e42"} _hover={{ borderColor: "#ad8e42" }}
+                        autoComplete={"username"} placeholder='Login'
+                        onChange={(e) => {
+                            setUsername(e.currentTarget.value)
+                        }}
                     />
                 </FormControl>
             </Center>
@@ -85,21 +85,21 @@ export default function Register() {
                     <Box color={"red"}>
                         {passwordError}
                     </Box>
-                    <Input focusBorderColor={"#ad8e42"} borderColor={"#ad8e42"} _hover={{borderColor: "#ad8e42"}}
-                           placeholder='Password'
-                           autoComplete={"current-password"}
-                           type={"password"} onChange={(e) => {
-                        setPassword(e.currentTarget.value)
-                    }}
+                    <Input focusBorderColor={"#ad8e42"} borderColor={"#ad8e42"} _hover={{ borderColor: "#ad8e42" }}
+                        placeholder='Password'
+                        autoComplete={"current-password"}
+                        type={"password"} onChange={(e) => {
+                            setPassword(e.currentTarget.value)
+                        }}
                     />
                 </FormControl>
             </Center>
 
             <Center mt={"30px"}>
-                <Button text={"Sign up"} onClick={() => {
-                    const result = validate({email: email, username: username, password: password}, constraints)
+                <Button text={"Sign up"} onClick={async () => {
+                    const result = validate({ email: email, username: username, password: password }, constraints)
                     if (result === undefined) {
-                        register(api, email, username, password)
+                        await register(api, email, username, password)
                     } else {
                         if (Object.keys(result).findIndex(x => x === "password") !== -1) {
                             setPasswordError(result.password.join(', '))
@@ -111,7 +111,7 @@ export default function Register() {
                             setEmailError(result.email.join(', '))
                         }
                     }
-                }}/>
+                }} />
             </Center>
         </Flex>
     </Center>

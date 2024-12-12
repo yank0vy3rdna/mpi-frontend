@@ -6,13 +6,14 @@ import { useState } from "react";
 import useApi from "../api/interface";
 import useBalanceStore from "../store/balanceStore";
 
-export default function TradeCard({ pictureUrl, name, id, count, price, countAvailableToSell }: {
+export default function TradeCard({ pictureUrl, name, id, count, price, countAvailableToSell, revalidate }: {
     pictureUrl: string,
     name: string,
     id: number,
     count: number,
     countAvailableToSell: number,
-    price: number
+    price: number,
+    revalidate: () => void
 }) {
     const api = useApi()
     const { updateBalance } = useBalanceStore()
@@ -71,7 +72,9 @@ export default function TradeCard({ pictureUrl, name, id, count, price, countAva
                         </Box>
                         <Button text={"Продать"} onClick={async () => {
                             await api.MakeTrade(id, countToSell)
+                            setCountToSell(0)
                             await updateBalance(api)
+                            revalidate()
                         }} />
                     </> : <></>
                 }

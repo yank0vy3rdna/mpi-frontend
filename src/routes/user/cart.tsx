@@ -21,15 +21,15 @@ export async function CartLoader() {
 const constraints = {
     latitude: {
         numericality: {
-            greaterThanOrEqualTo: -90,
-            lessThanOrEqualTo: 90,
+            greaterThanOrEqualTo: 0,
+            lessThanOrEqualTo: 640,
         },
         presence: { message: "is required" }
     },
     longitude: {
         numericality: {
-            greaterThanOrEqualTo: -180,
-            lessThanOrEqualTo: 180,
+            greaterThanOrEqualTo: 0,
+            lessThanOrEqualTo: 360,
         },
         presence: { message: "is required" }
     }
@@ -60,7 +60,7 @@ export default function Cart() {
     const [latitude, setLatitude] = useState(0)
     const [longitudeError, setLongitudeError] = useState("")
     const [latitudeError, setLatitudeError] = useState("")
-    const { gold } = useBalanceStore()
+    const { gold, updateBalance } = useBalanceStore()
     const [cart, removeFromCart, clearCart] = useCartStore(state => [
         state.cart,
         state.removeFromCart,
@@ -150,8 +150,8 @@ export default function Cart() {
                     <Input focusBorderColor={"#ad8e42"} borderColor={"#ad8e42"} _hover={{ borderColor: "#ad8e42" }}
                         placeholder='Latitude'
                         type={"number"}
-                        max={90}
-                        min={-90}
+                        max={640}
+                        min={0}
                         value={latitude}
                         onChange={(e) => {
                             setLatitude(Number(e.currentTarget.value))
@@ -167,8 +167,8 @@ export default function Cart() {
                     </Box>
                     <Input focusBorderColor={"#ad8e42"} borderColor={"#ad8e42"} _hover={{ borderColor: "#ad8e42" }}
                         placeholder='Longitude'
-                        max={180}
-                        min={-180}
+                        max={360}
+                        min={0}
                         value={longitude}
                         type={"number"} onChange={(e) => {
                             setLongitude(Number(e.currentTarget.value))
@@ -194,10 +194,12 @@ export default function Cart() {
                             if (result === undefined) {
                                 const res = await api.MakeAnOrder(cart, latitude, longitude)
                                 if (!res.success) {
-                                    alert("not success makeanorder") // todo remove
                                     return
                                 }
                                 clearCart()
+
+                                await updateBalance(api)
+
                                 if (res.courier === null) {
                                     navigate(fullPaths.hireCourierPathBuilder(res.orderId))
                                 } else {

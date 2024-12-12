@@ -18,13 +18,17 @@ export class mockApi implements Interface {
         // // role OWNER
         // return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwicm9sZSI6Ik9XTkVSIn0.k2PU54UY0Niw05RMrc-6ce70CIpL7qPhikgg6Kd4Ut0"
         // role COURIER
-        //return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJyb2xlIjoiQ09VUklFUiJ9.ezkuUYOjheLLueyiiWW0vdgjPuGacvKZVDb8wWC1WsA"
+        // return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJyb2xlIjoiQ09VUklFUiJ9.ezkuUYOjheLLueyiiWW0vdgjPuGacvKZVDb8wWC1WsA"
     }
 
     async CurrentBalance(): Promise<CurrentBalanceResp> {
+        console.log("current balance")
         return {
             gold: 10,
         }
+    }
+    async MakeStep(): Promise<void> {
+
     }
 
     async Register(email: string, username: string, password: string): Promise<string> {
@@ -119,6 +123,83 @@ export class mockApi implements Interface {
     }
 
     async Order(id: number): Promise<OrderResponse> {
+        console.log('query order')
+        if (Math.random() > 0.5)
+            return {
+                order: {
+                    id: id,
+                    status: "govno",
+                    orderTime: "2024-12-03 12:59",
+                    orderUnits: [
+                        {
+                            unitId: 1,
+                            count: 3,
+                            pictureUrl: "/img/units/Чёрт(60).gif",
+                            position: {
+                                lat: 90,
+                                lon: 160
+                            }
+                        },
+                    ],
+                    currentCoord: {
+                        lat: 110,
+                        lon: 210,
+                    },
+                    fullPath: [
+                        { lat: 90, lon: 160 },
+                        { lat: 110, lon: 210 },
+                        { lat: 80, lon: 230 },
+                        { lat: 83, lon: 280 },
+                    ],
+                    courier: null
+                },
+                map: {
+                    roads: [
+                        {
+                            id: 3, points: [
+                                { lat: 10, lon: 90 },
+                                { lat: 20, lon: 120 },
+                                { lat: 90, lon: 160 },
+                                { lat: 110, lon: 210 },
+                                { lat: 80, lon: 230 },
+                                { lat: 83, lon: 280 },
+                                { lat: 105, lon: 310 },
+                                { lat: 135, lon: 290 },
+                                { lat: 215, lon: 320 },
+                                { lat: 215, lon: 350 },
+                                { lat: 290, lon: 355 },
+                            ]
+                        },
+                        {
+                            id: 4, points: [
+                                { lat: 215, lon: 320 },
+                                { lat: 255, lon: 300 },
+                                { lat: 275, lon: 310 },
+                                { lat: 365, lon: 250 },
+                                { lat: 435, lon: 305 },
+                                { lat: 480, lon: 305 },
+                                { lat: 510, lon: 330 },
+                                { lat: 490, lon: 345 },
+                                { lat: 450, lon: 355 },
+                                { lat: 420, lon: 355 },
+                                { lat: 400, lon: 340 },
+                                { lat: 360, lon: 355 },
+                                { lat: 315, lon: 330 },
+                            ]
+                        },
+                    ],
+                    crossRoads: [
+                        {
+                            roadIds: [3, 4],
+                            point: { lat: 215, lon: 320 },
+                        },
+                        {
+                            roadIds: [4, 5],
+                            point: { lat: 365, lon: 250 },
+                        },
+                    ]
+                }
+            }
         return {
             order: {
                 id: id,
@@ -321,7 +402,7 @@ export class mockApi implements Interface {
         return {
             order: {
                 id: 1,
-                status: "заказан",
+                status: "WAITING_COURIER_ANSWER",
                 orderTime: "2024-12-03 12:59",
                 orderUnits: [],
                 currentCoord: {

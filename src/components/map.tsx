@@ -1,5 +1,6 @@
 import { Stage, Graphics, Sprite } from '@pixi/react';
 import { Application, Graphics as PixiGraphics, ICanvas } from 'pixi.js';
+import '@pixi/gif';
 import { useCallback, useEffect, useState } from 'react';
 import useMobile from '../hooks/isMobile';
 import { LandMap, Coord, OrderUnit } from '../api/interface';
@@ -47,6 +48,7 @@ export default function OrderMap({ map, currentPoint, fullPath, units }: { map: 
                 g.lineTo(point.lat * coordMultiplier, point.lon * coordMultiplier);
             }
         })
+
 
         g.beginFill(0x00d9ff)
         // g.drawCircle(currentPoint.lat, currentPoint.lon, 3)
@@ -99,6 +101,13 @@ export default function OrderMap({ map, currentPoint, fullPath, units }: { map: 
                 x={0}
                 y={0}
                 scale={scaleFactor}
+            />
+            <Sprite
+                image={"/img/flag.gif"}
+                x={fullPath[fullPath.length - 1].lat * coordMultiplier}
+                y={fullPath[fullPath.length - 1].lon * coordMultiplier}
+                scale={coordMultiplier * 0.1}
+                anchor={{ x: 0, y: 1 }}
             />
 
             <Graphics draw={draw} />

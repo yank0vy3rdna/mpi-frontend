@@ -1,5 +1,5 @@
 import { MakeApiFromLocalStorage, OrdersResponse, UnitsResponse } from "../../api/interface";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useRevalidator } from "react-router-dom";
 import { borderStyle } from "../../components/border";
 import Heading from "../../components/heading";
 import { Box, Center, Flex } from "@chakra-ui/react";
@@ -7,7 +7,8 @@ import { Td, Th, Tr } from "../../components/table";
 import useMobile from "../../hooks/isMobile";
 import Button from "../../components/button";
 import fullPaths from "../../router/routes";
-import React from "react";
+import React, { useEffect } from "react";
+import useWSStore from "../../store/wsStore";
 
 type ApiResp = {
     Orders: OrdersResponse,
@@ -25,6 +26,18 @@ export default function Orders() {
     const isMobile = useMobile()
     const navigate = useNavigate()
     const data = useLoaderData() as ApiResp;
+    const [registerMessageHandler, deregisterMessageHandler] = useWSStore(state => [state.registerMessageHandler, state.deregisterMessageHandler])
+    let revalidator = useRevalidator();
+
+    useEffect(() => {
+        const messageType = "order_update"
+        registerMessageHandler(messageType, () => {
+            revalidator.revalidate()
+        })
+        return () => {
+            deregisterMessageHandler(messageType)
+        }
+    }, [])
 
     if (Object.keys(data.Orders.orders).length === 0) {
         return <Center height={"80vh"}>

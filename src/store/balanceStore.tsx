@@ -9,9 +9,6 @@ interface State {
 
 interface Action {
     updateBalance(api: Interface): Promise<void>
-    getBalance(api: Interface): Promise<{
-        gold: number,
-    }>
 }
 
 const initialState: State = {
@@ -27,16 +24,6 @@ export const useBalanceStore = create<State & Action>()(
 
                 set({ initialized: true, gold: balance.gold })
             },
-            async getBalance(api: Interface): Promise<{
-                gold: number,
-            }> {
-                if (!get().initialized) {
-                    await get().updateBalance(api)
-                }
-                return {
-                    gold: get().gold,
-                }
-            }
         })
     )
 )

@@ -10,9 +10,9 @@ interface State {
 interface Action {
     logout(): void
 
-    login(api: Interface, username: string, password: string): void
+    login(api: Interface, username: string, password: string): Promise<void>
 
-    register(api: Interface, email: string, username: string, password: string): void
+    register(api: Interface, email: string, username: string, password: string): Promise<void>
 }
 
 const initialState: State = {

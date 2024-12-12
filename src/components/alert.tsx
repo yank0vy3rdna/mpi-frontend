@@ -6,12 +6,16 @@ import useWSStore from "../store/wsStore";
 export default function Alert() {
     const [isOpen, body, header, onClose, newAlert] = useModalStore(state => [state.isOpen, state.body, state.header, state.onClose, state.newAlert])
 
-    const [registerMessageHandler] = useWSStore(state => [state.registerMessageHandler])
+    const [registerMessageHandler, deregisterMessageHandler] = useWSStore(state => [state.registerMessageHandler, state.deregisterMessageHandler])
 
     useEffect(() => {
-        registerMessageHandler("astro", (data) => {
+        const messageType = "astro"
+        registerMessageHandler(messageType, (data) => {
             newAlert("Астрологи предсказали!", data.text)
         })
+        return () => {
+            deregisterMessageHandler(messageType)
+        }
     }, [])
     return (
         <>

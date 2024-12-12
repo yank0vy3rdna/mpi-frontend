@@ -39,6 +39,8 @@ export interface Interface {
     TradesTop(): Promise<TradesResponse>
 
     MakeTrade(id: number, count: number): Promise<void>
+
+    MakeStep(): Promise<void>
 }
 interface Trade {
     pictureUrl: string,
@@ -163,7 +165,7 @@ export interface LoginResponse {
     token: string
 }
 
-const useMockAPI = false
+const useMockAPI = true
 
 export default function useApi(): Interface {
     const token = useTokenStore(state => state.token)

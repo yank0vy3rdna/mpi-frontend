@@ -34,6 +34,13 @@ export class Api implements Interface {
         })
         return response.data.token
     }
+    async MakeStep(): Promise<void> {
+        await axios.post(`${this.baseApiPath}/delivery/orders/step`, {}, {
+            headers: {
+                'Authorization': `Bearer ${this.token}`
+            },
+        })
+    }
     async CurrentBalance(): Promise<CurrentBalanceResp> {
         const response = await axios.get<CurrentBalanceResp>(`${this.baseApiPath}/users/current`, {
             headers: {

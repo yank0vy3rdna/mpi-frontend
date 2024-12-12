@@ -5,6 +5,7 @@ interface State {
     connected: boolean
     socket: WebSocket | null
     handlers: { [messageType: string]: (data: any) => void }
+    lostMessages: { [messageType: string]: any }
     timerId: number | null
 }
 
@@ -12,29 +13,60 @@ interface Action {
     openWebSocketConnection(token: string): void
     closeConnection(): void
     registerMessageHandler(messageType: string, handler: (data: any) => void): void
+    deregisterMessageHandler(messageType: string): void
 }
 
 const initialState: State = {
     socket: null,
     connected: false,
     handlers: {},
+    lostMessages: {},
     timerId: null
 }
 export const useWSStore = create<State & Action>()(
     devtools(
         (set, get): State & Action => ({
             ...initialState,
-            registerMessageHandler(messageType: string, handler: (data: any) => void): void {
-                if (Object.keys(get().handlers).indexOf(messageType) !== -1) {
-                    alert("handler already exist")
+            deregisterMessageHandler(messageType) {
+                if (Object.keys(get().handlers).indexOf(messageType) === -1) {
                     return
                 }
-                set({ handlers: { ...get().handlers, messageType: handler } })
+
+                const handlers = { ...get().handlers }
+
+                delete handlers[messageType]
+
+                set({ handlers: handlers })
+
+                console.info("handler deregistered", messageType)
+            },
+            registerMessageHandler(messageType: string, handler: (data: any) => void): void {
+                if (Object.keys(get().handlers).indexOf(messageType) !== -1) {
+                    return
+                }
+                const handlers = { ...get().handlers }
+
+                handlers[messageType] = handler
+
+                set({ handlers: handlers })
+
+                console.info("handler registered", messageType)
+                const lostMessages = { ...get().lostMessages }
+                if (Object.keys(lostMessages).indexOf(messageType) !== -1) {
+                    const data = lostMessages[messageType]
+                    delete lostMessages[messageType]
+                    set({ lostMessages: lostMessages })
+                    setTimeout(() => { handler(data) })
+                }
             },
             closeConnection: () => {
                 const socket = get().socket
                 if (socket === null) {
                     return
+                }
+                const timerId = get().timerId
+                if (timerId !== null) {
+                    clearInterval(timerId)
                 }
                 socket.close()
             },
@@ -50,11 +82,16 @@ export const useWSStore = create<State & Action>()(
                     set({ connected: true });
                     console.log("connected to ws successfully", token)
                 });
+
                 socket.addEventListener('message', (event) => {
                     const data = JSON.parse(event.data)
                     const handlers = get().handlers
                     if (Object.keys(handlers).indexOf(data.messageType) === -1) {
-                        console.error("handler not found", data.messageType)
+                        const lostMessages = { ...get().lostMessages }
+                        lostMessages[data.messageType] = data.data
+                        set({ lostMessages: lostMessages })
+
+                        return
                     }
                     handlers[data.messageType](data.data)
 

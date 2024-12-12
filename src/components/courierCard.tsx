@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import fullPaths from "../router/routes";
 import useApi from "../api/interface";
 import Gold from "./gold";
+import useBalanceStore from "../store/balanceStore";
 
 export default function CourierCard({ pictureUrl, name, id, orderId, price }: {
     pictureUrl: string,
@@ -13,6 +14,7 @@ export default function CourierCard({ pictureUrl, name, id, orderId, price }: {
     price: number,
     orderId: string
 }) {
+    const [gold, updateBalance] = useBalanceStore(state => [state.gold, state.updateBalance])
     const api = useApi()
     const navigate = useNavigate()
     return <Box
@@ -43,10 +45,23 @@ export default function CourierCard({ pictureUrl, name, id, orderId, price }: {
                     <Flex>Цена: {price}<Gold /></Flex>
                 </Box>
             </Flex>
-            <Button text={"Нанять"} onClick={async () => {
-                await api.HireCourier(orderId, id)
-                navigate(fullPaths.ordersPath)
-            }} />
+            {
+                price <= gold ?
+                    <Button text={"Нанять"} onClick={async () => {
+                        await api.HireCourier(orderId, id)
+                        await updateBalance(api)
+                        navigate(fullPaths.orderPathBuilder(Number(orderId)))
+                    }} /> : <Flex flexDir={"column"} p={"5px"}>
+                        <Center mb={"20px"}>
+                            Не хватает золота
+                        </Center>
+
+                        <Button text={"Продать ресурсы"} onClick={async () => {
+                            navigate(fullPaths.tradeTopPath)
+                        }} />
+
+                    </Flex>
+            }
         </Flex>
     </Box >
 }
