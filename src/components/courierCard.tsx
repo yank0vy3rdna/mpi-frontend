@@ -1,4 +1,5 @@
-import { Box, Center, Flex, Heading, Image } from "@chakra-ui/react";
+import { Box, Center, Flex, Image } from "@chakra-ui/react";
+import Heading from "./heading";
 import { borderStyle } from "./border";
 import Button from "./button";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +7,7 @@ import fullPaths from "../router/routes";
 import useApi from "../api/interface";
 import Gold from "./gold";
 import useBalanceStore from "../store/balanceStore";
+import useMobile from "../hooks/isMobile";
 
 export default function CourierCard({ pictureUrl, name, id, orderId, price }: {
     pictureUrl: string,
@@ -14,15 +16,15 @@ export default function CourierCard({ pictureUrl, name, id, orderId, price }: {
     price: number,
     orderId: string
 }) {
+    const isMobile = useMobile()
     const [gold, updateBalance] = useBalanceStore(state => [state.gold, state.updateBalance])
     const api = useApi()
     const navigate = useNavigate()
     return <Box
         __css={borderStyle}
-        w={"225px"}
-        minH={"350px"}
         background={"url(/img/homm3-border-bg.png) 0 0 repeat #0d0c0a;"}
         m={"20px"}
+        p={isMobile ? "25px" : "35px"}
     >
         <Flex
             h={"100%"}
@@ -39,7 +41,7 @@ export default function CourierCard({ pictureUrl, name, id, orderId, price }: {
                         src={pictureUrl} />
                 </Center>
                 <Center w={"100%"}>
-                    <Heading size={"s"}>{name}</Heading>
+                    <Heading size="18px">{name}</Heading>
                 </Center>
                 <Box w={"100%"} pl={"10px"}>
                     <Flex>Цена: {price}<Gold /></Flex>

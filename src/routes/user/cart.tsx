@@ -77,13 +77,13 @@ export default function Cart() {
 
     const sum = cartPrefilled.map((x) => x.foundUnit.price * x.countInCart).reduce((partialSum, a) => partialSum + a, 0)
     if (Object.keys(cart).length === 0) {
-        return <Center height={"80vh"}>
+        return <Center >
             <Flex
                 __css={borderStyle}
                 background={"url(/img/homm3-border-bg.png) 0 0 repeat #0d0c0a;"}
                 minWidth={isMobile ? "90vw" : "40vw"}
-                m={"20px"}
-                p={"47px"}
+                m={isMobile ? "5%" : "20px"}
+                p={isMobile ? "5%" : "47px"}
                 flexDirection={"column"}
                 justifyContent={"space-between"}
             >
@@ -97,13 +97,13 @@ export default function Cart() {
             </Flex>
         </Center>
     }
-    return <Center height={"80vh"}>
+    return <Center>
         <Flex
             __css={borderStyle}
             background={"url(/img/homm3-border-bg.png) 0 0 repeat #0d0c0a;"}
-            minWidth={isMobile ? "90vw" : "40vw"}
-            m={"20px"}
-            p={"47px"}
+            minWidth={isMobile ? "90vw" : "0vw"}
+            m={isMobile ? "5%" : "20px"}
+            p={isMobile ? "5%" : "47px"}
             flexDirection={"column"}
             justifyContent={"space-between"}
         >
@@ -112,8 +112,8 @@ export default function Cart() {
                 <thead>
                     <Tr>
                         <Th>Unit name</Th>
-                        <Th>Количество</Th>
-                        <Th>Цена за штуку</Th>
+                        {isMobile ? <></> : <Th>Количество</Th>}
+                        {isMobile ? <></> : <Th>Цена за штуку</Th>}
                         <Th>Сумма</Th>
                     </Tr>
                 </thead>
@@ -122,14 +122,14 @@ export default function Cart() {
                         navigate(fullPaths.unitPathBuilder(x.foundUnit.id))
                     }}>
                         <Td>{x.foundUnit.name}</Td>
-                        <Td>{x.countInCart}</Td>
-                        <Td><Flex>{x.foundUnit.price}<Gold /></Flex></Td>
+                        {isMobile ? <></> : <Td>{x.countInCart}</Td>}
+                        {isMobile ? <></> : <Td><Flex>{x.foundUnit.price}<Gold /></Flex></Td>}
                         <Td><Flex>{x.foundUnit.price * x.countInCart}<Gold /></Flex></Td>
                     </Tr>)}
                 </tbody>
                 <tfoot>
                     <Tr fontWeight={"bold"}>
-                        <td colSpan={3} style={{
+                        <td colSpan={isMobile ? 1 : 3} style={{
                             margin: "7px", padding: "7px", border: "1px solid #ad8e42",
                             borderRadius: 5
                         }}>Сумма
@@ -203,7 +203,7 @@ export default function Cart() {
                                 if (res.courier === null) {
                                     navigate(fullPaths.hireCourierPathBuilder(res.orderId))
                                 } else {
-                                    navigate(fullPaths.ordersPath)
+                                    navigate(fullPaths.orderPathBuilder(res.orderId))
                                 }
                             } else {
                                 if (Object.keys(result).findIndex(x => x === "latitude") !== -1) {

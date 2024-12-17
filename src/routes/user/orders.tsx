@@ -40,7 +40,7 @@ export default function Orders() {
     }, [])
 
     if (Object.keys(data.Orders.orders).length === 0) {
-        return <Center height={"80vh"}>
+        return <Center >
             <Flex
                 __css={borderStyle}
                 background={"url(/img/homm3-border-bg.png) 0 0 repeat #0d0c0a;"}
@@ -60,23 +60,23 @@ export default function Orders() {
             </Flex>
         </Center>
     }
-    return <Center height={"80vh"}>
+    return <Center>
         <Flex
             __css={borderStyle}
             background={"url(/img/homm3-border-bg.png) 0 0 repeat #0d0c0a;"}
             minWidth={isMobile ? "90vw" : "40vw"}
-            m={"20px"}
-            p={"47px"}
+            m={isMobile ? "5%" : "20px"}
+            p={isMobile ? "5%" : "47px"}
             flexDirection={"column"}
             justifyContent={"space-between"}
         >
             <Heading>Заказы</Heading>
-            <Box as={"table"} __css={borderStyle} m={"20px"}>
+            <Box as={"table"} __css={borderStyle} m={isMobile ? "" : "20px"}>
                 <thead>
                     <Tr>
                         <Th>Id заказа</Th>
-                        <Th>Дата заказа</Th>
-                        <Th>Статус заказа</Th>
+                        {isMobile ? <></> : <Th>Дата заказа</Th>}
+                        {isMobile ? <></> : <Th>Статус заказа</Th>}
                         <Th>Список</Th>
                     </Tr>
                 </thead>
@@ -86,8 +86,8 @@ export default function Orders() {
                             navigate(fullPaths.orderPathBuilder(x.id))
                         }}>
                             <Td>{x.id}</Td>
-                            <Td>{x.orderTime}</Td>
-                            <Td>{x.status}</Td>
+                            {isMobile ? <></> : <Td>{x.orderTime}</Td>}
+                            {isMobile ? <></> : <Td>{x.status}</Td>}
                             <Td>{x.orderUnits.map((x) => {
                                 const unit = data.Units.units.find((u) => u.id === x.unitId)
 

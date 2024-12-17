@@ -1,4 +1,5 @@
-import { Box, Center, Flex, Heading, Image } from "@chakra-ui/react";
+import { Box, Center, Flex, Image } from "@chakra-ui/react";
+import Heading from "./heading";
 import { borderStyle } from "./border";
 import Button from "./button";
 import Gold from "./gold";
@@ -42,7 +43,7 @@ export default function TradeCard({ pictureUrl, name, id, count, price, countAva
                         src={pictureUrl} />
                 </Center>
                 <Center w={"100%"}>
-                    <Heading size={"s"}>{name}</Heading>
+                    <Heading size="18px">{name}</Heading>
                 </Center>
                 <Box w={"100%"} pl={"10px"}>
                     <Flex flexDirection={"row"}>Цена: {price} <Gold /></Flex>

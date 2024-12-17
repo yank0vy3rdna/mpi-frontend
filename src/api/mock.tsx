@@ -8,7 +8,8 @@ import {
     UnitDetails,
     UnitsResponse,
     CurrentBalanceResp,
-    TradesResponse
+    TradesResponse,
+    Order
 } from "./interface";
 
 export class mockApi implements Interface {
@@ -49,7 +50,47 @@ export class mockApi implements Interface {
                     pictureUrl: "/img/couriers/4.webp",
                     name: "Васян",
                     price: 5,
-                }
+                }, {
+                    id: 1,
+                    pictureUrl: "/img/couriers/4.webp",
+                    name: "Васян",
+                    price: 5,
+                }, {
+                    id: 1,
+                    pictureUrl: "/img/couriers/4.webp",
+                    name: "Васян",
+                    price: 5,
+                }, {
+                    id: 1,
+                    pictureUrl: "/img/couriers/4.webp",
+                    name: "Васян",
+                    price: 5,
+                }, {
+                    id: 1,
+                    pictureUrl: "/img/couriers/4.webp",
+                    name: "Васян",
+                    price: 5,
+                }, {
+                    id: 1,
+                    pictureUrl: "/img/couriers/4.webp",
+                    name: "Васян",
+                    price: 5,
+                }, {
+                    id: 1,
+                    pictureUrl: "/img/couriers/4.webp",
+                    name: "Васян",
+                    price: 5,
+                }, {
+                    id: 1,
+                    pictureUrl: "/img/couriers/4.webp",
+                    name: "Васян",
+                    price: 5,
+                }, {
+                    id: 1,
+                    pictureUrl: "/img/couriers/4.webp",
+                    name: "Васян",
+                    price: 5,
+                },
             ],
         }
     }
@@ -128,7 +169,7 @@ export class mockApi implements Interface {
             return {
                 order: {
                     id: id,
-                    status: "govno",
+                    status: "ACCEPTED",
                     orderTime: "2024-12-03 12:59",
                     orderUnits: [
                         {
@@ -151,7 +192,14 @@ export class mockApi implements Interface {
                         { lat: 80, lon: 230 },
                         { lat: 83, lon: 280 },
                     ],
-                    courier: null
+                    courier: {
+                        id: 1,
+                        pictureUrl: "/img/couriers/4.webp",
+                        name: "Васян",
+                        price: 5,
+
+                    },
+
                 },
                 map: {
                     roads: [
@@ -402,7 +450,7 @@ export class mockApi implements Interface {
         return {
             order: {
                 id: 1,
-                status: "WAITING_COURIER_ANSWER",
+                status: "ACCEPTED",
                 orderTime: "2024-12-03 12:59",
                 orderUnits: [],
                 currentCoord: {
@@ -452,7 +500,7 @@ export class mockApi implements Interface {
     async CreateCourierAccount(email: string, username: string, password: string, price: number, pictureUrl: string): Promise<void> {
     }
 
-    async CloseOrder(orderId: string): Promise<void> {
+    async CloseOrder(orderId: number): Promise<void> {
 
     }
 
@@ -461,9 +509,12 @@ export class mockApi implements Interface {
     }
 
     async Orders(): Promise<OrdersResponse> {
-        return {
-            orders: [{
-                id: 1,
+        const orders: Order[] = []
+
+        for (let index = 0; index < 100; index++) {
+
+            const order = {
+                id: index,
                 status: "заказан",
                 orderTime: "2024-12-03 12:59",
                 orderUnits: [
@@ -500,7 +551,11 @@ export class mockApi implements Interface {
                     },
                 ],
                 courier: null
-            }]
+            }
+            orders.push(order)
+        }
+        return {
+            orders: orders
         }
     }
 

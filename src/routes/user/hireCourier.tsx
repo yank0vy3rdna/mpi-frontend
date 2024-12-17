@@ -1,7 +1,7 @@
-import useApi, {Courier, MakeApiFromLocalStorage} from "../../api/interface";
-import {useLoaderData, useNavigate, useParams} from "react-router-dom";
-import {Box, Center, Flex} from "@chakra-ui/react";
-import {borderStyle} from "../../components/border";
+import useApi, { Courier, MakeApiFromLocalStorage } from "../../api/interface";
+import { useLoaderData, useNavigate, useParams } from "react-router-dom";
+import { Box, Center, Flex } from "@chakra-ui/react";
+import { borderStyle } from "../../components/border";
 import Heading from "../../components/heading";
 import Button from "../../components/button";
 import fullPaths from "../../router/routes";
@@ -18,17 +18,19 @@ export default function HireCourier() {
     const api = useApi()
     const isMobile = useMobile()
     const navigate = useNavigate()
-    let {orderId} = useParams() as { orderId: string };
+    const { orderId } = useParams() as { orderId: string };
+
+    const orderIdNum = Number(orderId)
 
 
     if (couriers.length === 0) {
-        return <Center height={"80vh"}>
+        return <Center>
             <Flex
                 __css={borderStyle}
                 background={"url(/img/homm3-border-bg.png) 0 0 repeat #0d0c0a;"}
                 minWidth={isMobile ? "90vw" : "40vw"}
-                m={"20px"}
-                p={"47px"}
+                m={isMobile ? "5px" : "20px"}
+                p={isMobile ? "5px" : "47px"}
                 flexDirection={"column"}
                 justifyContent={"space-between"}
             >
@@ -39,13 +41,13 @@ export default function HireCourier() {
                     дождитесь пока уже нанятый курьер закончит заказ</Box>
 
                 <Button text={"Отменить заказ"} onClick={async () => {
-                    await api.CloseOrder(orderId)
-                    navigate(fullPaths.ordersPath)
-                }}/>
+                    await api.CloseOrder(orderIdNum)
+                    navigate(fullPaths.orderPathBuilder(orderIdNum))
+                }} />
                 <Box mt={"20px"}>
                     <Button text={"К списку заказов"} onClick={() => {
                         navigate(fullPaths.ordersPath)
-                    }}/>
+                    }} />
                 </Box>
             </Flex>
         </Center>
@@ -54,7 +56,8 @@ export default function HireCourier() {
     return <Flex
         m={"20px"}
         p={"10px"}
-        justifyContent={"left"}
+        justifyContent={isMobile ? "center" : "left"}
+        alignItems={"flex-start"}
         flexWrap={"wrap"}
     >
         {couriers.map((courier) =>

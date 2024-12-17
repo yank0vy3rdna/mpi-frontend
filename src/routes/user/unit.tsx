@@ -25,13 +25,13 @@ export default function Unit() {
     }
     const ableToAddToCart = countInCart < data.count
 
-    return <Center height={"80vh"}>
+    return <Center>
         <Flex
             __css={borderStyle}
             background={"url(/img/homm3-border-bg.png) 0 0 repeat #0d0c0a;"}
-            width={isMobile ? "90vw" : "40vw"}
-            m={"20px"}
-            p={"45px"}
+            width={isMobile ? "90vw" : "70vw"}
+            m={isMobile ? "5%" : "20px"}
+            p={isMobile ? "5%" : "47px"}
             flexDirection={"column"}
             justifyContent={"space-between"}
         >

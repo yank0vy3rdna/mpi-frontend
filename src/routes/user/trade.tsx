@@ -1,10 +1,11 @@
-import { Center, Flex, Heading } from "@chakra-ui/react";
+import { Center, Flex } from "@chakra-ui/react";
 import { isMobile } from "pixi.js";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router-dom";
 import { MakeApiFromLocalStorage, TradesResponse, UnitsResponse } from "../../api/interface";
 import { borderStyle } from "../../components/border";
 import Button from "../../components/button";
 import TradeCard from "../../components/tradeCard";
+import Heading from "../../components/heading";
 import fullPaths from "../../router/routes";
 import useBalanceStore from "../../store/balanceStore";
 import useCartStore from "../../store/cartStore";
@@ -35,22 +36,23 @@ export default function Trade() {
     const cartPrefilled = cartPrefill(cart, data.Units, removeFromCart)
 
     const sum = cartPrefilled.map((x) => x.foundUnit.price * x.countInCart).reduce((partialSum, a) => partialSum + a, 0)
-    return <Center height={"80vh"}>
+    return <Center>
         <Flex
             __css={borderStyle}
             background={"url(/img/homm3-border-bg.png) 0 0 repeat #0d0c0a;"}
             width={isMobile ? "90vw" : "40vw"}
-            m={"20px"}
-            p={"45px"}
+            m={isMobile ? "5%" : "20px"}
+            p={isMobile ? "5%" : "47px"}
             flexDirection={"column"}
-            justifyContent={"space-between"}
+            alignItems={"flex-start"}
+            justifyContent={"center"}
         >
-            <Heading>Лучшие предложения</Heading>
+            <Heading>Все предложения</Heading>
             <Flex
                 m={"20px"}
                 p={"10px"}
-                justifyContent={"left"}
                 flexWrap={"wrap"}
+                justifyContent={"center"}
             >
                 {data.Trades.trades.map((trade) =>
                     <TradeCard
@@ -66,18 +68,18 @@ export default function Trade() {
                 )}
             </Flex>
             {sum != 0 && sum <= gold ? <>
-                <Center w={"100%"}>
+                <Center w={"100%"} p={"0.5%"}>
                     <Center>
-                        <Heading size={"s"}>Золота хватает на покупку</Heading>
+                        Золота хватает на покупку
                     </Center>
                 </Center>
-                <Center w={"100%"}>
+                <Center w={"100%"} p={"0.5%"}>
                     <Center>
                         <Button text="В корзину" onClick={() => { navigate(fullPaths.cartPath) }} />
                     </Center>
                 </Center></> : <></>
             }
-            <Center w={"100%"}>
+            <Center w={"100%"} p={"0.5%"}>
                 <Center>
                     <Button text="Лучшие предложения" onClick={() => { navigate(fullPaths.tradeTopPath) }} />
                 </Center>

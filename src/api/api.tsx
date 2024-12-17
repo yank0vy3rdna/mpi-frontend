@@ -171,7 +171,7 @@ export class Api implements Interface {
         return resp.data
     }
 
-    async CloseOrder(orderId: string): Promise<void> {
+    async CloseOrder(orderId: number): Promise<void> {
         await axios.post(`${this.baseApiPath}/orders/${orderId}/cancel`, {}, {
             headers: {
                 'Content-Type': 'application/json',

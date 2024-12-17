@@ -28,7 +28,7 @@ export function Order() {
 
     useEffect(() => {
         const messageType = "new_courier_order"
-        registerMessageHandler(messageType, (data) => {
+        registerMessageHandler(messageType, () => {
             newAlert("Вам назначен заказ", "Доставьте войска клиенту")
             revalidator.revalidate()
         })
@@ -37,14 +37,24 @@ export function Order() {
         }
     }, [])
 
+    useEffect(() => {
+        const messageType = "order_update"
+        registerMessageHandler(messageType, () => {
+            revalidator.revalidate()
+        })
+        return () => {
+            deregisterMessageHandler(messageType)
+        }
+    }, [])
 
-    return <Center height={"80vh"}>
+
+    return <Center>
         <Flex
             __css={borderStyle}
             background={"url(/img/homm3-border-bg.png) 0 0 repeat #0d0c0a;"}
             minWidth={isMobile ? "90vw" : "40vw"}
-            m={"20px"}
-            p={"47px"}
+            m={isMobile ? "5%" : "20px"}
+            p={isMobile ? "5%" : "47px"}
             flexDirection={"column"}
             justifyContent={"space-between"}
         >
@@ -56,7 +66,7 @@ export function Order() {
                         <Flex m={"20px"} flexDirection={"column"}>
                             <Box>ID: {data.Order.order.id}</Box>
                             <Box>Время заказа: {data.Order.order.orderTime}</Box>
-                            <Box>Статус заказа:{data.Order.order.status}</Box>
+                            <Box>Статус заказа: {data.Order.order.status}</Box>
                             <Box>{data.Order.order.orderUnits.map((x) => {
                                 const unit = data.Units.units.find((u) => u.id === x.unitId)
 
@@ -85,12 +95,12 @@ export function Order() {
 
                             }} />
                         </Flex> : <>
-                            <OrderMap
+                            <Center><OrderMap
                                 map={data.Order.map}
                                 currentPoint={data.Order.order.currentCoord}
                                 fullPath={data.Order.order.fullPath}
                                 units={data.Order.order.orderUnits}
-                            />
+                            /></Center>
                             <Box mt={"20px"}>
                                 <Button text={data.Order.order.status === "APPROVED" ? "Юнит забран" : "Войска доставлены"} onClick={async () => {
                                     if (data.Order.order === null) {

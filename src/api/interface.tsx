@@ -22,7 +22,7 @@ export interface Interface {
 
     Couriers(): Promise<CouriersResponse>
 
-    CloseOrder(orderId: string): Promise<void>
+    CloseOrder(orderId: number): Promise<void>
 
     HireCourier(orderId: string, courierId: number): Promise<void>
 
@@ -63,7 +63,7 @@ export interface OrderUnit {
     position: Coord
     pictureUrl: string
 }
-interface Order {
+export interface Order {
     id: number,
     status: string,
     courier: Courier | null,
@@ -165,7 +165,7 @@ export interface LoginResponse {
     token: string
 }
 
-const useMockAPI = true
+const useMockAPI = false
 
 export default function useApi(): Interface {
     const token = useTokenStore(state => state.token)

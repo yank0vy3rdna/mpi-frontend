@@ -1,4 +1,4 @@
-import { MakeApiFromLocalStorage, OrderResponse } from "../../api/interface";
+import useApi, { MakeApiFromLocalStorage, OrderResponse } from "../../api/interface";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router-dom";
 import { borderStyle } from "../../components/border";
 import Heading from "../../components/heading";
@@ -22,12 +22,10 @@ export async function OrderLoader({ params }: any): Promise<ApiResp> {
     }
 }
 
-function inArr(s: string, arr: string[]): boolean {
-    return arr.indexOf(s) !== -1
-}
 export default function Order() {
     const isMobile = useMobile()
     const navigate = useNavigate()
+    const api = useApi()
     const data = useLoaderData() as ApiResp;
     const [registerMessageHandler, deregisterMessageHandler] = useWSStore(state => [state.registerMessageHandler, state.deregisterMessageHandler])
     let revalidator = useRevalidator();
@@ -42,13 +40,13 @@ export default function Order() {
         }
     }, [])
 
-    return <Center height={"80vh"}>
+    return <Center>
         <Flex
             __css={borderStyle}
             background={"url(/img/homm3-border-bg.png) 0 0 repeat #0d0c0a;"}
             minWidth={isMobile ? "90vw" : "40vw"}
-            m={"20px"}
-            p={"47px"}
+            m={isMobile ? "5%" : "20px"}
+            p={isMobile ? "5%" : "47px"}
             flexDirection={"column"}
             justifyContent={"space-between"}
         >
@@ -56,26 +54,31 @@ export default function Order() {
             <Box mt={"20px"}>Статус: {data.Order.order.status}</Box>
             {
                 data.Order.order.courier !== null ?
-                    <Box mt={"20px"}>Курьер {data.Order.order.courier.name} (id {data.Order.order.courier.id}) привезет ваш заказ`</Box> : <></>
+                    <Box mt={"20px"}>Курьер {data.Order.order.courier.name} (id {data.Order.order.courier.id}) привезет ваш заказ</Box> : <></>
             }
             {
                 data.Order.order.courier !== null ?
-                    <OrderMap
+                    <Center><OrderMap
                         map={data.Order.map}
                         currentPoint={data.Order.order.currentCoord}
                         fullPath={data.Order.order.fullPath}
                         units={data.Order.order.orderUnits}
-                    /> : <></>
+                    /></Center> : <></>
             }
 
             {
                 data.Order.order.status === "NO_COURIER_AVAILABLE" && data.Order.order.courier === null
                     ? <Box mt={"20px"}><Button text={"Нанять курьера"} onClick={() => {
-                        console.log("hire courier")
                         navigate(fullPaths.hireCourierPathBuilder(data.Order.order.id))
                     }} /></Box> : <></>
             }
-
+            {
+                data.Order.order.status !== "CANCELED" && data.Order.order.status !== "DELIVERED"
+                    ? <Box mt={"20px"}><Button text={"Отменить заказ"} onClick={async () => {
+                        await api.CloseOrder(data.Order.order.id)
+                        revalidator.revalidate()
+                    }} /></Box> : <></>
+            }
 
             <Box mt={"20px"}><Button text={"К списку заказов"} onClick={() => {
                 navigate(fullPaths.ordersPath)

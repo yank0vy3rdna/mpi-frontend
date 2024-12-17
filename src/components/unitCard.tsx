@@ -1,4 +1,5 @@
-import { Box, Center, Flex, Heading, Image } from "@chakra-ui/react";
+import { Box, Center, Flex, Image } from "@chakra-ui/react";
+import Heading from "./heading";
 import { borderStyle } from "./border";
 import Button from "./button";
 import useCartStore from "../store/cartStore";
@@ -46,7 +47,7 @@ export default function UnitCard({ pictureUrl, name, id, count, price }: {
                         src={pictureUrl} />
                 </Center>
                 <Center w={"100%"}>
-                    <Heading size={"s"}>{name}</Heading>
+                    <Heading size="18px">{name}</Heading>
                 </Center>
                 <Box w={"100%"} pl={"10px"}>
                     <Flex flexDirection={"row"}>Цена: {price} <Gold /></Flex>
