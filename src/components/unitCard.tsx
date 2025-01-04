@@ -52,6 +52,9 @@ export default function UnitCard({ pictureUrl, name, id, count, price }: {
                 <Box w={"100%"} pl={"10px"}>
                     <Flex flexDirection={"row"}>Цена: {price} <Gold /></Flex>
                 </Box>
+                <Box w={"100%"} pl={"10px"}>
+                    <Flex flexDirection={"row"}>Доступно к покупке: {count}</Flex>
+                </Box>
             </Flex>
             {
                 countInCart >= 1 ?

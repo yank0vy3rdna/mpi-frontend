@@ -2,12 +2,14 @@ import { borderStyle } from "../../components/border";
 import { Box, Center, Flex, Image } from "@chakra-ui/react";
 import useMobile from "../../hooks/isMobile";
 import { MakeApiFromLocalStorage, UnitDetails } from "../../api/interface";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useRevalidator } from "react-router-dom";
 import Heading from "../../components/heading";
 import useCartStore from "../../store/cartStore";
 import Button from "../../components/button";
 import fullPaths from "../../router/routes";
 import Gold from "../../components/gold";
+import useWSStore from "../../store/wsStore";
+import { useEffect } from "react";
 
 export async function UnitLoader({ params }: any) {
     const p = params as { unitId: number }
@@ -19,11 +21,23 @@ export default function Unit() {
     let data = useLoaderData() as UnitDetails;
     const navigate = useNavigate()
     const [cart, addToCart, removeFromCart] = useCartStore((state) => [state.cart, state.addToCart, state.removeFromCart])
+    const registerAstroCallback = useWSStore((state) => state.registerAstroCallback)
+    const revalidator = useRevalidator()
     let countInCart = cart[data.id]
     if (countInCart === undefined) {
         countInCart = 0
     }
     const ableToAddToCart = countInCart < data.count
+
+    useEffect(() => {
+        registerAstroCallback(() => {
+            revalidator.revalidate()
+        })
+
+        return () => {
+            registerAstroCallback(() => { })
+        }
+    }, [])
 
     return <Center>
         <Flex
@@ -40,6 +54,7 @@ export default function Unit() {
 
             <Box mt={"20px"}>{data.description}</Box>
             <Box mt={"20px"}><Flex>Цена: {data.price}<Gold /></Flex></Box>
+            <Box mt={"20px"}><Flex>Доступно к покупке: {data.count}</Flex></Box>
 
             {
                 countInCart >= 1 ?

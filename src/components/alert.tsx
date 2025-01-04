@@ -10,7 +10,7 @@ export default function Alert() {
 
     useEffect(() => {
         const messageType = "astro"
-        registerMessageHandler(messageType, (data) => {
+        registerMessageHandler(messageType, (data: { text: string }) => {
             newAlert("Астрологи предсказали!", data.text)
         })
         return () => {

@@ -7,6 +7,7 @@ interface State {
     handlers: { [messageType: string]: (data: any) => void }
     lostMessages: { [messageType: string]: any }
     timerId: number | null
+    astroCallback: () => void
 }
 
 interface Action {
@@ -14,6 +15,7 @@ interface Action {
     closeConnection(): void
     registerMessageHandler(messageType: string, handler: (data: any) => void): void
     deregisterMessageHandler(messageType: string): void
+    registerAstroCallback(handler: () => void): void
 }
 
 const initialState: State = {
@@ -21,12 +23,16 @@ const initialState: State = {
     connected: false,
     handlers: {},
     lostMessages: {},
-    timerId: null
+    timerId: null,
+    astroCallback: () => { }
 }
 export const useWSStore = create<State & Action>()(
     devtools(
         (set, get): State & Action => ({
             ...initialState,
+            registerAstroCallback(handler) {
+                set({ astroCallback: handler })
+            },
             deregisterMessageHandler(messageType) {
                 if (Object.keys(get().handlers).indexOf(messageType) === -1) {
                     return
@@ -94,6 +100,7 @@ export const useWSStore = create<State & Action>()(
                         return
                     }
                     handlers[data.messageType](data.data)
+                    get().astroCallback()
 
                 });
                 socket.addEventListener('close', () => {
